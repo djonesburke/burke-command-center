@@ -86,20 +86,6 @@
       "updated": "2026-03-26T00:00:00Z"
     },
     {
-      "id": "task_002",
-      "title": "Follow up on pending customer contract",
-      "project_id": "proj_005",
-      "priority": "p1",
-      "status": "todo",
-      "owner": "Dalton",
-      "due": "2026-03-27",
-      "next_action": "Send revised contract terms",
-      "notes": "Waiting on their legal review",
-      "claude": false,
-      "created": "2026-03-26T00:00:00Z",
-      "updated": "2026-03-26T00:00:00Z"
-    },
-    {
       "id": "task_003",
       "title": "Odoo: Configure new inventory workflow for parts dept",
       "project_id": "proj_001",
@@ -143,7 +129,7 @@
     },
     {
       "id": "task_006",
-      "title": "Google Drive Reorganization — Audit & Propose Structure",
+      "title": "Google Drive Reorganization â Audit & Propose Structure",
       "project_id": "proj_004",
       "priority": "p2",
       "status": "todo",
@@ -164,14 +150,14 @@
       "owner": "Dalton",
       "due": "",
       "next_action": "Session with Claude to extract and document tribal BOM knowledge",
-      "notes": "All BOM knowledge currently held by Dalton only — highest risk item",
+      "notes": "All BOM knowledge currently held by Dalton only â highest risk item",
       "claude": true,
       "created": "2026-03-26T00:00:00Z",
       "updated": "2026-03-26T00:00:00Z"
     },
     {
       "id": "task_008",
-      "title": "Configure Helpdesk module — email aliases and Gmail integration",
+      "title": "Configure Helpdesk module â email aliases and Gmail integration",
       "project_id": "proj_001",
       "priority": "p2",
       "status": "todo",
