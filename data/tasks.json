@@ -101,20 +101,6 @@
       "type": "internal"
     },
     {
-      "id": "task_004",
-      "title": "Draft employee policy update for Q2",
-      "project_id": "proj_007",
-      "priority": "p2",
-      "status": "todo",
-      "owner": "Dalton",
-      "due": "",
-      "next_action": "Claude to draft initial policy document",
-      "notes": "",
-      "claude": true,
-      "created": "2026-03-26T00:00:00Z",
-      "updated": "2026-03-26T00:00:00Z"
-    },
-    {
       "id": "task_005",
       "title": "Research competitive pricing on truck service packages",
       "project_id": "proj_005",
