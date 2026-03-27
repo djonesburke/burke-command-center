@@ -1,0 +1,217 @@
+{
+  "meta": {
+    "owner": "Dalton Jones",
+    "company": "Burke Truck Equipment",
+    "last_updated": "2026-03-27",
+    "version": "1.0"
+  },
+  "projects": [
+    {
+      "id": "proj_001",
+      "name": "Odoo 19 Full Implementation",
+      "type": "odoo",
+      "priority": "p1",
+      "status": "inprogress",
+      "description": "Get all core modules live, connected, and used daily by every dept",
+      "color": "#e8a020"
+    },
+    {
+      "id": "proj_002",
+      "name": "Odoo Knowledge Base / AI Operating System",
+      "type": "odoo",
+      "priority": "p1",
+      "status": "inprogress",
+      "description": "Build a structured AI brain inside Odoo Knowledge so agents and staff can retrieve Burke-specific answers",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "proj_003",
+      "name": "BOM & Manufacturing Order Build-Out",
+      "type": "odoo",
+      "priority": "p1",
+      "status": "inprogress",
+      "description": "Convert tribal knowledge into documented BOMs and MOs so all depts can operate independently",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "proj_004",
+      "name": "Google Drive Reorganization",
+      "type": "internal",
+      "priority": "p2",
+      "status": "todo",
+      "description": "Audit and restructure Drive with consistent naming, folder taxonomy, and secure sensitive docs",
+      "color": "#10b981"
+    },
+    {
+      "id": "proj_005",
+      "name": "Sales",
+      "type": "external",
+      "priority": "p2",
+      "status": "active",
+      "description": "Customer contracts, quoting, and municipal sales pipeline",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "proj_006",
+      "name": "Finance",
+      "type": "internal",
+      "priority": "p2",
+      "status": "active",
+      "description": "Financial reporting, Q1 review, and board summaries",
+      "color": "#ef4444"
+    },
+    {
+      "id": "proj_007",
+      "name": "HR & Operations",
+      "type": "internal",
+      "priority": "p2",
+      "status": "active",
+      "description": "Employee policies, hiring, and operational procedures",
+      "color": "#6366f1"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task_001",
+      "title": "Review Q1 financials & prepare board summary",
+      "project_id": "proj_006",
+      "priority": "p1",
+      "status": "inprogress",
+      "owner": "Dalton",
+      "due": "2026-03-27",
+      "next_action": "Pull reports from Odoo, draft 1-pager",
+      "notes": "",
+      "claude": false,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-26T00:00:00Z"
+    },
+    {
+      "id": "task_002",
+      "title": "Follow up on pending customer contract",
+      "project_id": "proj_005",
+      "priority": "p1",
+      "status": "todo",
+      "owner": "Dalton",
+      "due": "2026-03-27",
+      "next_action": "Send revised contract terms",
+      "notes": "Waiting on their legal review",
+      "claude": false,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-26T00:00:00Z"
+    },
+    {
+      "id": "task_003",
+      "title": "Odoo: Configure new inventory workflow for parts dept",
+      "project_id": "proj_001",
+      "priority": "p2",
+      "status": "blocked",
+      "owner": "Dalton",
+      "due": "",
+      "next_action": "Resolve IT user permissions first",
+      "notes": "Blocked: IT access needed",
+      "claude": false,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-26T00:00:00Z"
+    },
+    {
+      "id": "task_004",
+      "title": "Draft employee policy update for Q2",
+      "project_id": "proj_007",
+      "priority": "p2",
+      "status": "todo",
+      "owner": "Dalton",
+      "due": "",
+      "next_action": "Claude to draft initial policy document",
+      "notes": "",
+      "claude": true,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-26T00:00:00Z"
+    },
+    {
+      "id": "task_005",
+      "title": "Research competitive pricing on truck service packages",
+      "project_id": "proj_005",
+      "priority": "p3",
+      "status": "todo",
+      "owner": "Dalton",
+      "due": "",
+      "next_action": "Claude to run competitive market research",
+      "notes": "Municipal snow removal truck service & repair market, Madison WI area",
+      "claude": true,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-26T00:00:00Z"
+    },
+    {
+      "id": "task_006",
+      "title": "Google Drive Reorganization — Audit & Propose Structure",
+      "project_id": "proj_004",
+      "priority": "p2",
+      "status": "todo",
+      "owner": "Claude",
+      "due": "",
+      "next_action": "Claude to generate full file inventory and proposed folder map for Dalton approval",
+      "notes": "No files moved until Dalton approves proposed structure",
+      "claude": true,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-26T00:00:00Z"
+    },
+    {
+      "id": "task_007",
+      "title": "Complete BOM documentation for primary truck configurations",
+      "project_id": "proj_003",
+      "priority": "p1",
+      "status": "inprogress",
+      "owner": "Dalton",
+      "due": "",
+      "next_action": "Session with Claude to extract and document tribal BOM knowledge",
+      "notes": "All BOM knowledge currently held by Dalton only — highest risk item",
+      "claude": true,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-26T00:00:00Z"
+    },
+    {
+      "id": "task_008",
+      "title": "Configure Helpdesk module — email aliases and Gmail integration",
+      "project_id": "proj_001",
+      "priority": "p2",
+      "status": "todo",
+      "owner": "Dalton",
+      "due": "",
+      "next_action": "Set up email aliases, link Gmail, configure support teams",
+      "notes": "",
+      "claude": false,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-26T00:00:00Z"
+    },
+    {
+      "id": "task_009",
+      "title": "Configure auto-project creation from confirmed Sales Orders",
+      "project_id": "proj_001",
+      "priority": "p1",
+      "status": "todo",
+      "owner": "Dalton",
+      "due": "",
+      "next_action": "Map SO confirmation trigger to Project module template",
+      "notes": "",
+      "claude": true,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-26T00:00:00Z"
+    },
+    {
+      "id": "task_010",
+      "title": "Bulk SOP import into Odoo Knowledge Base",
+      "project_id": "proj_002",
+      "priority": "p2",
+      "status": "todo",
+      "owner": "Dalton",
+      "due": "",
+      "next_action": "Finalize folder structure then begin import",
+      "notes": "Folder structure already mapped",
+      "claude": true,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-26T00:00:00Z"
+    }
+  ],
+  "brain_dump": [],
+  "claude_queue_notes": "Tasks marked claude:true are queued for Claude. Reference task IDs when reporting completion."
+}
