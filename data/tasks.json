@@ -1,10 +1,4 @@
 {
-  "meta": {
-    "owner": "Dalton Jones",
-    "company": "Burke Truck Equipment",
-    "last_updated": "2026-03-27",
-    "version": "1.0"
-  },
   "projects": [
     {
       "id": "proj_001",
@@ -72,37 +66,8 @@
   ],
   "tasks": [
     {
-      "id": "task_001",
-      "title": "Review Q1 financials & prepare board summary",
-      "project_id": "proj_006",
-      "priority": "p1",
-      "status": "done",
-      "owner": "Dalton",
-      "due": "2026-03-27",
-      "next_action": "Pull reports from Odoo, draft 1-pager",
-      "notes": "",
-      "claude": false,
-      "created": "2026-03-26T00:00:00Z",
-      "updated": "2026-03-27T17:45:44.942Z"
-    },
-    {
-      "id": "task_003",
-      "title": "Odoo: Configure new inventory workflow for parts dept",
-      "project_id": "proj_001",
-      "priority": "p2",
-      "status": "done",
-      "owner": "Dalton",
-      "due": "",
-      "next_action": "Resolve IT user permissions first",
-      "notes": "Blocked: IT access needed",
-      "claude": false,
-      "created": "2026-03-26T00:00:00Z",
-      "updated": "2026-03-27T17:41:55.175Z",
-      "type": "internal"
-    },
-    {
       "id": "task_006",
-      "title": "Google Drive Reorganization â Audit & Propose Structure",
+      "title": "Google Drive Reorganization Ã¢ÂÂ Audit & Propose Structure",
       "project_id": "proj_004",
       "priority": "p2",
       "status": "todo",
@@ -123,7 +88,7 @@
       "owner": "Dalton",
       "due": "",
       "next_action": "Session with Claude to extract and document tribal BOM knowledge",
-      "notes": "All BOM knowledge currently held by Dalton only â highest risk item",
+      "notes": "All BOM knowledge currently held by Dalton only Ã¢ÂÂ highest risk item",
       "claude": true,
       "created": "2026-03-26T00:00:00Z",
       "updated": "2026-03-26T00:00:00Z"
@@ -144,21 +109,6 @@
       "type": "odoo"
     },
     {
-      "id": "task_009",
-      "title": "Configure auto-project creation from confirmed Sales Orders",
-      "project_id": "proj_001",
-      "priority": "p1",
-      "status": "done",
-      "owner": "Dalton",
-      "due": "",
-      "next_action": "Map SO confirmation trigger to Project module template",
-      "notes": "",
-      "claude": true,
-      "created": "2026-03-26T00:00:00Z",
-      "updated": "2026-03-27T17:52:59.386Z",
-      "type": "internal"
-    },
-    {
       "id": "task_010",
       "title": "Bulk SOP import into Odoo Knowledge Base",
       "project_id": "proj_002",
@@ -174,5 +124,60 @@
     }
   ],
   "brain_dump": [],
+  "archived": [
+    {
+      "id": "task_001",
+      "title": "Review Q1 financials & prepare board summary",
+      "project_id": "proj_006",
+      "priority": "p1",
+      "status": "done",
+      "owner": "Dalton",
+      "due": "2026-03-27",
+      "next_action": "Pull reports from Odoo, draft 1-pager",
+      "notes": "",
+      "claude": false,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-27T17:45:44.942Z",
+      "archived_at": "2026-03-27T18:10:16.257Z"
+    },
+    {
+      "id": "task_003",
+      "title": "Odoo: Configure new inventory workflow for parts dept",
+      "project_id": "proj_001",
+      "priority": "p2",
+      "status": "done",
+      "owner": "Dalton",
+      "due": "",
+      "next_action": "Resolve IT user permissions first",
+      "notes": "Blocked: IT access needed",
+      "claude": false,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-27T17:41:55.175Z",
+      "type": "internal",
+      "archived_at": "2026-03-27T18:10:16.257Z"
+    },
+    {
+      "id": "task_009",
+      "title": "Configure auto-project creation from confirmed Sales Orders",
+      "project_id": "proj_001",
+      "priority": "p1",
+      "status": "done",
+      "owner": "Dalton",
+      "due": "",
+      "next_action": "Map SO confirmation trigger to Project module template",
+      "notes": "",
+      "claude": true,
+      "created": "2026-03-26T00:00:00Z",
+      "updated": "2026-03-27T17:52:59.386Z",
+      "type": "internal",
+      "archived_at": "2026-03-27T18:10:16.257Z"
+    }
+  ],
+  "meta": {
+    "owner": "Dalton Jones",
+    "company": "Burke Truck Equipment",
+    "last_updated": "2026-03-27",
+    "version": "1.0"
+  },
   "claude_queue_notes": "Tasks marked claude:true are queued for Claude. Reference task IDs when reporting completion."
 }
