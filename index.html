@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEO Command Center — Burke Truck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500;700&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN: Industrial / Utilitarian — built for ops,
+   not decoration. Tight grid, high-contrast, fast.
+   ═══════════════════════════════════════════════════ */
+:root {
+  --bg:       #0c0e12;
+  --plate:    #111418;
+  --panel:    #161a20;
+  --raised:   #1c2028;
+  --line:     #242a34;
+  --line2:    #2e3644;
+  --ink:      #dde3ee;
+  --ink2:     #8896ae;
+  --ink3:     #4d5c72;
+  --amber:    #f0a500;
+  --amber2:   #ffc340;
+  --amber-bg: rgba(240,165,0,0.08);
+  --blue:     #3b82f6;
+  --blue-bg:  rgba(59,130,246,0.08);
+  --green:    #22c55e;
+  --green-bg: rgba(34,197,94,0.08);
+  --red:      #ef4444;
+  --red-bg:   rgba(239,68,68,0.08);
+  --purple:   #a78bfa;
+  --purple-bg:rgba(167,139,250,0.08);
+  --teal:     #2dd4bf;
+  --p1: #ef4444;
+  --p2: #f0a500;
+  --p3: #22c55e;
+  --r: 4px;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { height:100%; }
+body { font-family:'Barlow',sans-serif; background:var(--bg); color:var(--ink); height:100vh; overflow:hidden; display:flex; flex-direction:column; }
+
+/* ── SETUP SCREEN ─────────────────────────────────── */
+#setupScreen {
+  position:fixed; inset:0; background:var(--bg); z-index:1000;
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:0;
+}
+.setup-box {
+  background:var(--plate); border:1px solid var(--line2);
+  border-top:3px solid var(--amber); border-radius:var(--r);
+  padding:40px 48px; width:480px;
+}
+.setup-logo { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--amber); letter-spacing:2px; margin-bottom:4px; }
+.setup-sub { font-size:13px; color:var(--ink3); margin-bottom:32px; font-family:'JetBrains Mono',monospace; }
+.setup-label { font-size:11px; color:var(--ink2); text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; font-family:'JetBrains Mono',monospace; }
+.setup-input {
+  width:100%; background:var(--bg); border:1px solid var(--line2);
+  border-radius:var(--r); color:var(--ink); font-family:'JetBrains Mono',monospace;
+  font-size:13px; padding:10px 12px; outline:none; margin-bottom:20px;
+  transition:border-color .15s;
+}
+.setup-input:focus { border-color:var(--amber); }
+.setup-note { font-size:11px; color:var(--ink3); line-height:1.6; margin-bottom:24px; }
+.setup-note a { color:var(--amber); text-decoration:none; }
+.setup-btn {
+  width:100%; padding:12px; background:var(--amber); color:#0c0e12;
+  border:none; border-radius:var(--r); font-family:'Barlow',sans-serif;
+  font-size:15px; font-weight:700; cursor:pointer; letter-spacing:.05em;
+  transition:background .15s;
+}
+.setup-btn:hover { background:var(--amber2); }
+.setup-err { font-size:12px; color:var(--red); margin-top:12px; display:none; }
+
+/* ── TOPBAR ───────────────────────────────────────── */
+.topbar {
+  height:48px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 20px; background:var(--plate); border-bottom:1px solid var(--line);
+  flex-shrink:0; position:relative; z-index:50;
+}
+.wordmark { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--amber); letter-spacing:2px; line-height:1; }
+.wordmark span { color:var(--ink3); font-size:14px; letter-spacing:1px; }
+.topbar-center { display:flex; gap:2px; }
+.vtab {
+  font-family:'JetBrains Mono',monospace; font-size:10px; padding:5px 14px;
+  border-radius:3px; cursor:pointer; color:var(--ink3); background:transparent;
+  border:1px solid transparent; letter-spacing:.06em; text-transform:uppercase;
+  transition:all .12s;
+}
+.vtab:hover { color:var(--ink); border-color:var(--line2); }
+.vtab.on { background:var(--raised); border-color:var(--line2); color:var(--amber); }
+.topbar-right { display:flex; gap:8px; align-items:center; }
+.sync-pill {
+  font-family:'JetBrains Mono',monospace; font-size:10px; padding:3px 10px;
+  border-radius:20px; border:1px solid var(--line2); color:var(--ink3);
+  background:var(--bg); cursor:default; transition:all .2s;
+}
+.sync-pill.saving { color:var(--amber); border-color:var(--amber); }
+.sync-pill.saved  { color:var(--green); border-color:var(--green); }
+.sync-pill.err    { color:var(--red);   border-color:var(--red);   }
+.tbtn {
+  font-family:'Barlow',sans-serif; font-size:12px; font-weight:600;
+  padding:6px 14px; border-radius:var(--r); cursor:pointer; transition:all .12s;
+  border:1px solid var(--line2); background:var(--raised); color:var(--ink2);
+}
+.tbtn:hover { color:var(--ink); border-color:var(--line2); }
+.tbtn.accent { background:var(--amber); color:#0c0e12; border-color:var(--amber); }
+.tbtn.accent:hover { background:var(--amber2); }
+
+/* ── STATSBAR ─────────────────────────────────────── */
+.statsbar {
+  display:flex; border-bottom:1px solid var(--line); background:var(--plate); flex-shrink:0;
+}
+.stat {
+  flex:1; padding:8px 16px; display:flex; align-items:center; gap:10px;
+  border-right:1px solid var(--line);
+}
+.stat:last-child { border-right:none; }
+.stat-n { font-family:'Bebas Neue',sans-serif; font-size:26px; line-height:1; }
+.stat-l { font-size:11px; color:var(--ink2); line-height:1.3; }
+.stat-s { font-size:10px; color:var(--ink3); font-family:'JetBrains Mono',monospace; }
+
+/* ── FILTER BAR ───────────────────────────────────── */
+.filterbar {
+  padding:7px 16px; background:var(--panel); border-bottom:1px solid var(--line);
+  display:flex; gap:5px; flex-wrap:wrap; flex-shrink:0;
+}
+.fchip {
+  font-family:'JetBrains Mono',monospace; font-size:10px; padding:3px 10px;
+  border-radius:3px; border:1px solid var(--line); color:var(--ink3);
+  background:transparent; cursor:pointer; letter-spacing:.04em;
+  text-transform:uppercase; transition:all .1s;
+}
+.fchip:hover, .fchip.on {
+  border-color:var(--amber); color:var(--amber); background:var(--amber-bg);
+}
+
+/* ── MAIN ─────────────────────────────────────────── */
+.main { display:flex; flex:1; overflow:hidden; }
+
+/* ── SIDEBAR ──────────────────────────────────────── */
+.sidebar {
+  width:268px; flex-shrink:0; background:var(--plate);
+  border-right:1px solid var(--line); display:flex; flex-direction:column;
+  overflow-y:auto;
+}
+.sb-hdr {
+  font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--ink3);
+  padding:10px 14px 6px; text-transform:uppercase; letter-spacing:.1em;
+  border-bottom:1px solid var(--line);
+}
+.sb-body { padding:10px 12px; border-bottom:1px solid var(--line); }
+
+/* Quick Add */
+.qa-in {
+  width:100%; background:var(--bg); border:1px solid var(--line2);
+  border-radius:var(--r); color:var(--ink); font-family:'Barlow',sans-serif;
+  font-size:13px; padding:7px 10px; outline:none; transition:border-color .12s;
+}
+.qa-in:focus { border-color:var(--amber); }
+.qa-in::placeholder { color:var(--ink3); }
+.qa-row { display:flex; gap:5px; margin-top:5px; }
+.qa-sel {
+  flex:1; background:var(--bg); border:1px solid var(--line2);
+  border-radius:var(--r); color:var(--ink2); font-size:11px; padding:5px 6px;
+  outline:none; cursor:pointer; font-family:'JetBrains Mono',monospace;
+}
+.qa-go {
+  padding:5px 12px; background:var(--amber); color:#0c0e12; border:none;
+  border-radius:var(--r); cursor:pointer; font-weight:700; font-size:11px;
+  font-family:'Barlow',sans-serif; white-space:nowrap; transition:background .12s;
+}
+.qa-go:hover { background:var(--amber2); }
+
+/* Brain Dump */
+.bd-ta {
+  width:100%; background:var(--bg); border:1px solid var(--line2);
+  border-radius:var(--r); color:var(--ink); font-family:'JetBrains Mono',monospace;
+  font-size:11px; padding:8px 10px; resize:none; min-height:88px;
+  line-height:1.6; outline:none; transition:border-color .12s;
+}
+.bd-ta:focus { border-color:var(--amber); }
+.bd-ta::placeholder { color:var(--ink3); }
+.bd-save {
+  margin-top:6px; width:100%; padding:6px; font-size:11px; text-align:center;
+  background:var(--raised); border:1px solid var(--line2); border-radius:var(--r);
+  color:var(--ink2); cursor:pointer; font-family:'JetBrains Mono',monospace;
+  letter-spacing:.04em; transition:all .12s;
+}
+.bd-save:hover { border-color:var(--amber); color:var(--amber); }
+
+/* Claude Queue */
+.cq-item {
+  background:var(--bg); border:1px solid var(--line2);
+  border-left:3px solid var(--purple); border-radius:var(--r);
+  padding:7px 10px; margin-bottom:5px;
+}
+.cq-t { font-size:11px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+.cq-m { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink3); }
+.cq-empty { font-size:11px; color:var(--ink3); font-style:italic; }
+
+/* ── VIEWS ────────────────────────────────────────── */
+.view { display:none; flex:1; overflow:hidden; }
+.view.on { display:flex; }
+
+/* KANBAN */
+.kanban { flex:1; overflow-x:auto; overflow-y:hidden; padding:12px; display:flex; gap:10px; }
+.kcol { width:264px; flex-shrink:0; display:flex; flex-direction:column; max-height:100%; }
+.kcol-hdr {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 12px; border-radius:3px 3px 0 0;
+  border:1px solid var(--line); border-bottom:none; background:var(--raised);
+}
+.kcol-title { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+.kcol-ct {
+  font-family:'JetBrains Mono',monospace; font-size:10px;
+  background:var(--bg); border:1px solid var(--line); border-radius:10px;
+  padding:1px 7px; color:var(--ink3);
+}
+.kcol-body {
+  flex:1; overflow-y:auto; background:var(--panel);
+  border:1px solid var(--line); border-radius:0 0 3px 3px;
+  padding:8px; display:flex; flex-direction:column; gap:7px;
+}
+.kcol-empty { color:var(--ink3); font-size:11px; text-align:center; padding:16px 0; font-style:italic; font-family:'JetBrains Mono',monospace; }
+
+/* CARDS */
+.card {
+  background:var(--raised); border:1px solid var(--line2); border-radius:var(--r);
+  padding:11px; cursor:pointer; position:relative; overflow:hidden;
+  transition:transform .1s, box-shadow .1s, border-color .1s;
+  animation:cardIn .18s ease;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+.card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
+.card.p1::before { background:var(--p1); }
+.card.p2::before { background:var(--p2); }
+.card.p3::before { background:var(--p3); }
+.card:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,.5); border-color:var(--line2); }
+.card-top { display:flex; align-items:flex-start; gap:8px; margin-bottom:7px; }
+.card-title { font-size:12px; font-weight:500; color:var(--ink); line-height:1.4; flex:1; }
+.card-title.done { text-decoration:line-through; color:var(--ink3); }
+.chk {
+  width:15px; height:15px; border:1.5px solid var(--line2); border-radius:3px;
+  flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .1s; margin-top:1px;
+}
+.chk:hover { border-color:var(--green); }
+.chk.on { background:var(--green); border-color:var(--green); }
+.chk.on::after { content:'✓'; color:#0c0e12; font-size:9px; font-weight:900; }
+.card-tags { display:flex; flex-wrap:wrap; gap:3px; margin-bottom:7px; }
+.tag {
+  font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 5px;
+  border-radius:2px; font-weight:500; text-transform:uppercase; letter-spacing:.04em;
+}
+.tag.p1 { background:rgba(239,68,68,.12); color:var(--p1); border:1px solid rgba(239,68,68,.25); }
+.tag.p2 { background:rgba(240,165,0,.12);  color:var(--p2); border:1px solid rgba(240,165,0,.25); }
+.tag.p3 { background:rgba(34,197,94,.12); color:var(--p3); border:1px solid rgba(34,197,94,.25); }
+.tag.internal { background:rgba(59,130,246,.1); color:var(--blue); border:1px solid rgba(59,130,246,.2); }
+.tag.external { background:rgba(240,165,0,.1); color:var(--amber); border:1px solid rgba(240,165,0,.2); }
+.tag.odoo     { background:rgba(167,139,250,.1); color:var(--purple); border:1px solid rgba(167,139,250,.2); }
+.tag.claude-t { background:rgba(167,139,250,.15); color:var(--purple); border:1px solid rgba(167,139,250,.3); }
+.tag.proj-t   { background:transparent; color:var(--ink3); border:1px solid var(--line); }
+.card-action {
+  margin-bottom:7px; font-size:11px; color:var(--ink2); background:var(--bg);
+  border-radius:3px; padding:4px 8px; border-left:2px solid var(--line2); line-height:1.4;
+}
+.card-action-lbl { font-size:9px; color:var(--ink3); font-family:'JetBrains Mono',monospace; margin-bottom:1px; letter-spacing:.04em; text-transform:uppercase; }
+.card-footer { display:flex; align-items:center; justify-content:space-between; }
+.card-owner { font-size:10px; color:var(--ink3); font-family:'JetBrains Mono',monospace; }
+.card-due { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink3); }
+.card-due.late { color:var(--red); }
+.mvbtns { display:flex; gap:3px; margin-top:7px; flex-wrap:wrap; }
+.mv {
+  font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 6px;
+  border-radius:2px; cursor:pointer; border:1px solid var(--line); color:var(--ink3);
+  background:transparent; transition:all .1s; text-transform:uppercase; letter-spacing:.04em;
+}
+.mv:hover, .mv.on { border-color:var(--amber); color:var(--amber); background:var(--amber-bg); }
+
+/* PROJECTS VIEW */
+.projects-view { flex:1; overflow-y:auto; padding:16px; }
+.proj-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; }
+.proj-card {
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--r);
+  padding:16px; cursor:pointer; transition:all .12s; position:relative; overflow:hidden;
+}
+.proj-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.proj-card:hover { border-color:var(--line2); transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,.4); }
+.proj-card-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:8px; }
+.proj-card-name { font-size:14px; font-weight:600; color:var(--ink); line-height:1.3; }
+.proj-badge { font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 7px; border-radius:2px; text-transform:uppercase; letter-spacing:.05em; }
+.proj-desc { font-size:12px; color:var(--ink2); line-height:1.5; margin-bottom:10px; }
+.proj-stats { display:flex; gap:12px; }
+.proj-stat { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink3); }
+.proj-stat span { color:var(--ink2); }
+.proj-actions { margin-top:12px; display:flex; gap:6px; }
+.proj-btn {
+  font-size:11px; padding:4px 10px; border-radius:3px; cursor:pointer;
+  border:1px solid var(--line2); background:var(--raised); color:var(--ink2);
+  font-family:'Barlow',sans-serif; transition:all .12s;
+}
+.proj-btn:hover { border-color:var(--amber); color:var(--amber); }
+.proj-btn.add { background:var(--amber); color:#0c0e12; border-color:var(--amber); font-weight:600; }
+.proj-btn.add:hover { background:var(--amber2); }
+
+/* DAILY BRIEF */
+.brief-view { flex:1; overflow-y:auto; padding:16px; max-width:900px; }
+.brief-section { background:var(--panel); border:1px solid var(--line); border-radius:var(--r); padding:16px; margin-bottom:12px; }
+.brief-section h2 { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--amber); letter-spacing:1px; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.brief-item { padding:9px 0; border-bottom:1px solid var(--line); display:flex; gap:10px; align-items:flex-start; }
+.brief-item:last-child { border-bottom:none; padding-bottom:0; }
+.brief-body { flex:1; }
+.brief-title { font-size:13px; font-weight:500; margin-bottom:2px; }
+.brief-meta { font-size:11px; color:var(--ink2); font-family:'JetBrains Mono',monospace; }
+.ai-box { background:var(--purple-bg); border:1px solid rgba(167,139,250,.25); border-radius:var(--r); padding:11px 13px; margin-bottom:8px; }
+.ai-lbl { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--purple); text-transform:uppercase; letter-spacing:.08em; margin-bottom:5px; }
+.ai-box p { font-size:12px; color:var(--ink2); line-height:1.7; }
+.brief-loading { text-align:center; padding:40px; color:var(--ink3); font-family:'JetBrains Mono',monospace; font-size:12px; }
+.brief-loading::after { content:''; animation:dots 1s infinite; }
+@keyframes dots { 0%,100%{content:'.'} 33%{content:'..'} 66%{content:'...'} }
+
+/* MODAL */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:200; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .15s; }
+.overlay.on { opacity:1; pointer-events:all; }
+.modal {
+  background:var(--plate); border:1px solid var(--line2); border-top:2px solid var(--amber);
+  border-radius:var(--r); width:520px; max-height:85vh; overflow-y:auto; padding:24px;
+  transform:translateY(8px); transition:transform .15s;
+}
+.overlay.on .modal { transform:translateY(0); }
+.modal-title { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--amber); letter-spacing:1px; margin-bottom:18px; }
+.fl { margin-bottom:12px; }
+.fl label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--ink3); text-transform:uppercase; letter-spacing:.08em; display:block; margin-bottom:4px; }
+.fi {
+  width:100%; background:var(--bg); border:1px solid var(--line2); border-radius:var(--r);
+  color:var(--ink); font-family:'Barlow',sans-serif; font-size:13px; padding:8px 10px;
+  outline:none; transition:border-color .12s;
+}
+.fi:focus { border-color:var(--amber); }
+textarea.fi { resize:vertical; min-height:68px; line-height:1.5; font-family:'JetBrains Mono',monospace; font-size:12px; }
+.fl-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.modal-foot { display:flex; gap:8px; justify-content:flex-end; margin-top:20px; border-top:1px solid var(--line); padding-top:16px; }
+.cb-row { display:flex; align-items:center; gap:8px; margin-top:6px; }
+.cb-row input { accent-color:var(--purple); width:14px; height:14px; }
+.cb-row label { font-size:12px; color:var(--purple); cursor:pointer; font-family:'JetBrains Mono',monospace; }
+
+/* TOAST */
+.toast {
+  position:fixed; bottom:18px; right:18px; background:var(--raised);
+  border:1px solid var(--amber); border-radius:var(--r); padding:9px 16px;
+  font-size:12px; color:var(--amber); z-index:500; opacity:0;
+  transform:translateY(6px); transition:all .15s; pointer-events:none;
+  font-family:'JetBrains Mono',monospace; letter-spacing:.03em;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+}
+.toast.on { opacity:1; transform:translateY(0); }
+
+/* PROJECT MODAL */
+.pm-del { color:var(--red); font-size:11px; cursor:pointer; padding:6px 12px; border:1px solid rgba(239,68,68,.3); border-radius:var(--r); background:transparent; font-family:'Barlow',sans-serif; transition:all .12s; }
+.pm-del:hover { background:var(--red-bg); }
+
+::-webkit-scrollbar { width:3px; height:3px; }
+::-webkit-scrollbar-thumb { background:var(--line2); border-radius:2px; }
+
+/* Responsive: stack sidebar on small screens */
+@media (max-width:768px) {
+  .sidebar { display:none; }
+  .kanban { padding:8px; gap:8px; }
+  .kcol { width:240px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── SETUP SCREEN ──────────────────────────────────── -->
+<div id="setupScreen">
+  <div class="setup-box">
+    <div class="setup-logo">CEO COMMAND CENTER</div>
+    <div class="setup-sub">burke truck equipment — djonesburke</div>
+    <div class="setup-label">GitHub Personal Access Token</div>
+    <input class="setup-input" id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
+    <div class="setup-note">
+      Generate a token at <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a><br>
+      Scopes needed: <strong>repo</strong> (full control of private repositories)<br>
+      Token is stored only in your browser's localStorage — never sent anywhere except GitHub's API.
+    </div>
+    <button class="setup-btn" onclick="saveToken()">Connect to GitHub →</button>
+    <div class="setup-err" id="setupErr"></div>
+  </div>
+</div>
+
+<!-- ── TOPBAR ────────────────────────────────────────── -->
+<div class="topbar">
+  <div class="wordmark">BURKE TRUCK <span>// CEO OPS</span></div>
+  <div class="topbar-center">
+    <button class="vtab on" onclick="switchView('kanban',this)">KANBAN</button>
+    <button class="vtab" onclick="switchView('projects',this)">PROJECTS</button>
+    <button class="vtab" onclick="switchView('brief',this)">DAILY BRIEF</button>
+  </div>
+  <div class="topbar-right">
+    <div class="sync-pill" id="syncPill">● github</div>
+    <button class="tbtn" onclick="logout()" title="Disconnect token">Logout</button>
+    <button class="tbtn" onclick="openProjModal()">+ Project</button>
+    <button class="tbtn accent" onclick="openTaskModal()">+ Task</button>
+  </div>
+</div>
+
+<!-- ── STATS BAR ─────────────────────────────────────── -->
+<div class="statsbar" id="statsBar"></div>
+
+<!-- ── FILTER BAR ────────────────────────────────────── -->
+<div class="filterbar">
+  <button class="fchip on" onclick="setFilter('all',this)">ALL</button>
+  <button class="fchip" onclick="setFilter('p1',this)">P1 TODAY</button>
+  <button class="fchip" onclick="setFilter('p2',this)">P2 WEEK</button>
+  <button class="fchip" onclick="setFilter('p3',this)">P3 BACKLOG</button>
+  <button class="fchip" onclick="setFilter('internal',this)">INTERNAL</button>
+  <button class="fchip" onclick="setFilter('external',this)">EXTERNAL</button>
+  <button class="fchip" onclick="setFilter('odoo',this)">ODOO</button>
+  <button class="fchip" onclick="setFilter('claude',this)">→ CLAUDE</button>
+  <button class="fchip" onclick="setFilter('blocked',this)">BLOCKED</button>
+</div>
+
+<!-- ── MAIN ──────────────────────────────────────────── -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-hdr">⚡ Quick Add</div>
+    <div class="sb-body">
+      <input class="qa-in" id="qaTitle" placeholder="Task title… (Enter)" onkeydown="if(event.key==='Enter')quickAdd()" />
+      <div class="qa-row">
+        <select class="qa-sel" id="qaPri"><option value="p1">P1</option><option value="p2" selected>P2</option><option value="p3">P3</option></select>
+        <select class="qa-sel" id="qaType"><option value="internal">Internal</option><option value="external">External</option><option value="odoo">Odoo</option></select>
+      </div>
+      <div class="qa-row">
+        <select class="qa-sel" id="qaProjSel"></select>
+        <button class="qa-go" onclick="quickAdd()">ADD →</button>
+      </div>
+    </div>
+
+    <div class="sb-hdr">🧠 Brain Dump</div>
+    <div class="sb-body">
+      <textarea class="bd-ta" id="brainDump" placeholder="Dump thoughts here…&#10;3/27 9am: need to follow up..."></textarea>
+      <div class="bd-save" onclick="saveBrainDump()">SAVE BRAIN DUMP</div>
+    </div>
+
+    <div class="sb-hdr">🤖 Claude's Queue</div>
+    <div class="sb-body" style="flex:1" id="claudeQueue"></div>
+  </div>
+
+  <!-- KANBAN VIEW -->
+  <div class="view on" id="view-kanban">
+    <div class="kanban" id="kanban">
+      <div class="kcol"><div class="kcol-hdr"><span class="kcol-title" style="color:var(--blue)">To Do</span><span class="kcol-ct" id="cnt-todo">0</span></div><div class="kcol-body" id="body-todo"></div></div>
+      <div class="kcol"><div class="kcol-hdr"><span class="kcol-title" style="color:var(--p2)">In Progress</span><span class="kcol-ct" id="cnt-inprogress">0</span></div><div class="kcol-body" id="body-inprogress"></div></div>
+      <div class="kcol"><div class="kcol-hdr"><span class="kcol-title" style="color:var(--p1)">Blocked</span><span class="kcol-ct" id="cnt-blocked">0</span></div><div class="kcol-body" id="body-blocked"></div></div>
+      <div class="kcol"><div class="kcol-hdr"><span class="kcol-title" style="color:var(--purple)">Waiting</span><span class="kcol-ct" id="cnt-waiting">0</span></div><div class="kcol-body" id="body-waiting"></div></div>
+      <div class="kcol"><div class="kcol-hdr"><span class="kcol-title" style="color:var(--green)">Done</span><span class="kcol-ct" id="cnt-done">0</span></div><div class="kcol-body" id="body-done"></div></div>
+    </div>
+  </div>
+
+  <!-- PROJECTS VIEW -->
+  <div class="view" id="view-projects">
+    <div class="projects-view">
+      <div class="proj-grid" id="projGrid"></div>
+    </div>
+  </div>
+
+  <!-- DAILY BRIEF VIEW -->
+  <div class="view" id="view-brief">
+    <div class="brief-view" id="briefView">
+      <div class="brief-loading">Generating your daily brief</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── TASK MODAL ─────────────────────────────────────── -->
+<div class="overlay" id="taskOverlay" onclick="if(event.target===this)closeTaskModal()">
+  <div class="modal">
+    <div class="modal-title" id="taskModalTitle">+ NEW TASK</div>
+    <div class="fl"><label>Title *</label><input class="fi" id="mTitle" placeholder="What needs to be done?" /></div>
+    <div class="fl-2">
+      <div class="fl"><label>Priority</label><select class="fi" id="mPri"><option value="p1">🔴 P1 — Do Today</option><option value="p2" selected>🟡 P2 — This Week</option><option value="p3">🟢 P3 — Backlog</option></select></div>
+      <div class="fl"><label>Type</label><select class="fi" id="mType"><option value="internal">Internal</option><option value="external">External</option><option value="odoo">Odoo</option></select></div>
+    </div>
+    <div class="fl-2">
+      <div class="fl"><label>Project</label><select class="fi" id="mProj"></select></div>
+      <div class="fl"><label>Due Date</label><input class="fi" id="mDue" type="date" /></div>
+    </div>
+    <div class="fl-2">
+      <div class="fl"><label>Status</label><select class="fi" id="mStatus"><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="blocked">Blocked</option><option value="waiting">Waiting</option><option value="done">Done</option></select></div>
+      <div class="fl"><label>Owner</label><input class="fi" id="mOwner" value="Dalton" /></div>
+    </div>
+    <div class="fl"><label>Next Action</label><input class="fi" id="mNext" placeholder="Specific next step…" /></div>
+    <div class="fl"><label>Notes / Blocker</label><textarea class="fi" id="mNotes" placeholder="Context, blockers, links…"></textarea></div>
+    <div class="cb-row"><input type="checkbox" id="mClaude" /><label for="mClaude">→ Queue for Claude</label></div>
+    <div class="modal-foot">
+      <button class="tbtn" id="mDelete" style="display:none;color:var(--red);border-color:rgba(239,68,68,.3)" onclick="deleteTask()">Delete</button>
+      <button class="tbtn" onclick="closeTaskModal()">Cancel</button>
+      <button class="tbtn accent" onclick="saveTask()">Save Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROJECT MODAL ──────────────────────────────────── -->
+<div class="overlay" id="projOverlay" onclick="if(event.target===this)closeProjModal()">
+  <div class="modal">
+    <div class="modal-title" id="projModalTitle">+ NEW PROJECT</div>
+    <div class="fl"><label>Project Name *</label><input class="fi" id="pmName" placeholder="Project name…" /></div>
+    <div class="fl-2">
+      <div class="fl"><label>Type</label><select class="fi" id="pmType"><option value="internal">Internal</option><option value="external">External</option><option value="odoo">Odoo</option></select></div>
+      <div class="fl"><label>Priority</label><select class="fi" id="pmPri"><option value="p1">🔴 P1</option><option value="p2" selected>🟡 P2</option><option value="p3">🟢 P3</option></select></div>
+    </div>
+    <div class="fl-2">
+      <div class="fl"><label>Status</label><select class="fi" id="pmStatus"><option value="active">Active</option><option value="inprogress">In Progress</option><option value="todo">Planned</option><option value="done">Complete</option></select></div>
+      <div class="fl"><label>Color</label><input class="fi" id="pmColor" type="color" value="#f0a500" style="padding:4px;cursor:pointer;height:38px;" /></div>
+    </div>
+    <div class="fl"><label>Description</label><textarea class="fi" id="pmDesc" placeholder="What is this project about?"></textarea></div>
+    <div class="modal-foot">
+      <button class="pm-del" id="pmDelete" style="display:none" onclick="deleteProject()">Delete Project</button>
+      <button class="tbtn" onclick="closeProjModal()">Cancel</button>
+      <button class="tbtn accent" onclick="saveProject()">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ──────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════
+const REPO  = 'djonesburke/CEO-COMMAND-CENTER';
+const PATH  = 'data/tasks.json';
+const API   = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let data    = { projects:[], tasks:[], brain_dump:[], meta:{} };
+let fileSha = null;
+let token   = localStorage.getItem('bte_gh_token') || '';
+let filter  = 'all';
+let activeView = 'kanban';
+let editTaskId = null;
+let editProjId = null;
+let saveTimer  = null;
+
+// ═══════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════
+async function boot() {
+  if (!token) { document.getElementById('setupScreen').style.display='flex'; return; }
+  document.getElementById('setupScreen').style.display='none';
+  await loadData();
+}
+
+async function saveToken() {
+  const t = document.getElementById('tokenInput').value.trim();
+  if (!t) return;
+  token = t;
+  localStorage.setItem('bte_gh_token', t);
+  document.getElementById('setupErr').style.display='none';
+  document.getElementById('setupScreen').style.display='none';
+  const ok = await loadData();
+  if (!ok) {
+    document.getElementById('setupScreen').style.display='flex';
+    document.getElementById('setupErr').style.display='block';
+    document.getElementById('setupErr').textContent='Could not connect — check token and repo access';
+    token=''; localStorage.removeItem('bte_gh_token');
+  }
+}
+
+function logout() {
+  localStorage.removeItem('bte_gh_token');
+  token=''; location.reload();
+}
+
+// ═══════════════════════════════════════════════════════
+// GITHUB API
+// ═══════════════════════════════════════════════════════
+async function loadData() {
+  setSyncStatus('saving','● loading…');
+  try {
+    const res = await ghFetch(API, 'GET');
+    if (!res.ok) { setSyncStatus('err','● error'); return false; }
+    const json = await res.json();
+    fileSha = json.sha;
+    data = JSON.parse(atob(json.content.replace(/\n/g,'')));
+    render();
+    setSyncStatus('saved','● synced');
+    setTimeout(()=>setSyncStatus('','● github'), 2000);
+    return true;
+  } catch(e) {
+    setSyncStatus('err','● offline');
+    return false;
+  }
+}
+
+async function saveData() {
+  setSyncStatus('saving','● saving…');
+  data.meta.last_updated = new Date().toISOString().split('T')[0];
+  try {
+    const body = { message:'CEO dashboard update', content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))), sha: fileSha };
+    const res = await ghFetch(API, 'PUT', body);
+    if (!res.ok) { setSyncStatus('err','● save failed'); toast('⚠ Save failed — check token'); return; }
+    const json = await res.json();
+    fileSha = json.content.sha;
+    setSyncStatus('saved','● saved');
+    setTimeout(()=>setSyncStatus('','● github'), 2500);
+  } catch(e) {
+    setSyncStatus('err','● offline'); toast('⚠ Offline — changes pending');
+  }
+}
+
+function ghFetch(url, method, body) {
+  return fetch(url, {
+    method,
+    headers: { 'Authorization':`Bearer ${token}`, 'Content-Type':'application/json', 'Accept':'application/vnd.github.v3+json' },
+    body: body ? JSON.stringify(body) : undefined
+  });
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveData, 800);
+}
+
+function setSyncStatus(cls, text) {
+  const el = document.getElementById('syncPill');
+  el.className = 'sync-pill' + (cls ? ' '+cls : '');
+  el.textContent = text;
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+function render() {
+  renderStats();
+  renderKanban();
+  renderProjects();
+  renderClaudeQueue();
+  populateProjSelects();
+  if (document.getElementById('brainDump').value === '' && data.brain_dump?.length) {
+    document.getElementById('brainDump').value = data.brain_dump.join('\n');
+  }
+}
+
+function renderStats() {
+  const open    = data.tasks.filter(t=>t.status!=='done').length;
+  const done    = data.tasks.filter(t=>t.status==='done').length;
+  const p1      = data.tasks.filter(t=>t.priority==='p1'&&t.status!=='done').length;
+  const blocked = data.tasks.filter(t=>t.status==='blocked').length;
+  const claude  = data.tasks.filter(t=>t.claude&&t.status!=='done').length;
+  const pct     = data.tasks.length ? Math.round(done/data.tasks.length*100) : 0;
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat"><div class="stat-n">${open}</div><div><div class="stat-l">Open Tasks</div><div class="stat-s">${done} done</div></div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--p1)">${p1}</div><div><div class="stat-l">P1 Today</div><div class="stat-s">critical</div></div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--p1)">${blocked}</div><div><div class="stat-l">Blocked</div><div class="stat-s">need action</div></div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--purple)">${claude}</div><div><div class="stat-l">Claude Queue</div><div class="stat-s">delegated</div></div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--p2)">${data.projects.filter(p=>p.status!=='done').length}</div><div><div class="stat-l">Active Projects</div><div class="stat-s">&nbsp;</div></div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--green)">${pct}%</div><div><div class="stat-l">Progress</div><div class="stat-s">${done}/${data.tasks.length}</div></div></div>`;
+}
+
+function filteredTasks() {
+  return data.tasks.filter(t => {
+    if (filter==='all') return true;
+    if (['p1','p2','p3'].includes(filter)) return t.priority===filter;
+    if (['internal','external','odoo'].includes(filter)) return t.type===filter;
+    if (filter==='claude') return t.claude;
+    if (filter==='blocked') return t.status==='blocked';
+    return true;
+  });
+}
+
+function renderKanban() {
+  const cols = ['todo','inprogress','blocked','waiting','done'];
+  cols.forEach(c=>{ document.getElementById('body-'+c).innerHTML=''; document.getElementById('cnt-'+c).textContent='0'; });
+  const counts={};
+  filteredTasks().forEach(t=>{
+    const c=t.status||'todo'; counts[c]=(counts[c]||0)+1;
+    document.getElementById('body-'+c)?.appendChild(buildCard(t));
+  });
+  cols.forEach(c=>{
+    document.getElementById('cnt-'+c).textContent=counts[c]||0;
+    if(!counts[c]) document.getElementById('body-'+c).innerHTML='<div class="kcol-empty">empty</div>';
+  });
+}
+
+function projName(pid) {
+  const p = data.projects.find(x=>x.id===pid);
+  return p ? p.name : '';
+}
+function projType(pid) {
+  const p = data.projects.find(x=>x.id===pid);
+  return p ? p.type : 'internal';
+}
+
+function buildCard(t) {
+  const el = document.createElement('div');
+  el.className = `card ${t.priority}`;
+  const done = t.status==='done';
+  const today = new Date().toISOString().split('T')[0];
+  const late = t.due && t.due < today && !done;
+  const pn = projName(t.project_id);
+  const pt = t.type || projType(t.project_id);
+  const statuses=['todo','inprogress','blocked','waiting','done'];
+  el.innerHTML=`
+    <div class="card-top">
+      <div class="card-title ${done?'done':''}">${esc(t.title)}</div>
+      <div class="chk ${done?'on':''}" onclick="toggleDone('${t.id}',event)"></div>
+    </div>
+    <div class="card-tags">
+      <span class="tag ${t.priority}">${t.priority.toUpperCase()}</span>
+      <span class="tag ${pt}">${pt}</span>
+      ${t.claude?'<span class="tag claude-t">→ CLAUDE</span>':''}
+      ${pn?`<span class="tag proj-t">${esc(pn)}</span>`:''}
+    </div>
+    ${t.next_action?`<div class="card-action"><div class="card-action-lbl">next action</div>${esc(t.next_action)}</div>`:''}
+    <div class="card-footer">
+      <span class="card-owner">${esc(t.owner||'Dalton')}</span>
+      ${t.due?`<span class="card-due ${late?'late':''}">${late?'⚠ ':''}${fmtDate(t.due)}</span>`:''}
+    </div>
+    <div class="mvbtns">${statuses.map(s=>`<span class="mv ${t.status===s?'on':''}" onclick="moveCard('${t.id}','${s}',event)">${s}</span>`).join('')}</div>`;
+  el.addEventListener('dblclick',()=>openEditTaskModal(t.id));
+  return el;
+}
+
+function renderProjects() {
+  const grid = document.getElementById('projGrid');
+  if (!grid) return;
+  grid.innerHTML='';
+  const typeMap = {internal:'Internal',external:'External',odoo:'Odoo'};
+  const priColor = {p1:'var(--p1)',p2:'var(--p2)',p3:'var(--p3)'};
+  data.projects.forEach(p=>{
+    const taskCount = data.tasks.filter(t=>t.project_id===p.id).length;
+    const openCount = data.tasks.filter(t=>t.project_id===p.id&&t.status!=='done').length;
+    const div = document.createElement('div');
+    div.className='proj-card';
+    div.style.setProperty('--pc', p.color||'#f0a500');
+    div.querySelector?.call;
+    div.innerHTML=`
+      <style>.proj-card[data-id="${p.id}"]::before{background:${p.color||'#f0a500'}}</style>
+      <div class="proj-card-top">
+        <div class="proj-card-name">${esc(p.name)}</div>
+        <span class="proj-badge tag ${p.priority}">${p.priority.toUpperCase()}</span>
+      </div>
+      <div class="proj-desc">${esc(p.description||'')}</div>
+      <div class="proj-stats">
+        <div class="proj-stat">TASKS <span>${openCount} open / ${taskCount} total</span></div>
+        <div class="proj-stat">TYPE <span>${typeMap[p.type]||p.type}</span></div>
+        <div class="proj-stat">STATUS <span>${p.status}</span></div>
+      </div>
+      <div class="proj-actions">
+        <button class="proj-btn add" onclick="openTaskModalForProj('${p.id}',event)">+ Task</button>
+        <button class="proj-btn" onclick="openEditProjModal('${p.id}',event)">Edit</button>
+      </div>`;
+    div.dataset.id=p.id;
+    grid.appendChild(div);
+  });
+}
+
+function renderClaudeQueue() {
+  const q = data.tasks.filter(t=>t.claude&&t.status!=='done');
+  const el = document.getElementById('claudeQueue');
+  el.innerHTML = q.length
+    ? q.map(t=>`<div class="cq-item"><div class="cq-t">${esc(t.title)}</div><div class="cq-m">${esc(projName(t.project_id)||'—')} · ${t.priority.toUpperCase()}</div></div>`).join('')
+    : '<div class="cq-empty">No tasks queued</div>';
+}
+
+function populateProjSelects() {
+  const opts = `<option value="">-- No Project --</option>` +
+    data.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  ['qaProjSel','mProj'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=opts; });
+}
+
+// ═══════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════
+function toggleDone(id,e) {
+  e.stopPropagation();
+  const t=data.tasks.find(x=>x.id===id); if(!t) return;
+  t.status=t.status==='done'?'todo':'done';
+  t.updated=new Date().toISOString();
+  render(); scheduleSave(); toast(t.status==='done'?'✓ Marked complete':'Reopened');
+}
+
+function moveCard(id,status,e) {
+  e.stopPropagation();
+  const t=data.tasks.find(x=>x.id===id); if(!t) return;
+  t.status=status; t.updated=new Date().toISOString();
+  render(); scheduleSave(); toast(`→ ${status}`);
+}
+
+function quickAdd() {
+  const title=document.getElementById('qaTitle').value.trim();
+  if(!title) return;
+  const task = {
+    id:'task_'+Date.now(),
+    title,
+    priority:document.getElementById('qaPri').value,
+    type:document.getElementById('qaType').value,
+    project_id:document.getElementById('qaProjSel').value,
+    status:'todo', owner:'Dalton', due:'',
+    next_action:'', notes:'', claude:false,
+    created:new Date().toISOString(), updated:new Date().toISOString()
+  };
+  data.tasks.unshift(task);
+  render(); scheduleSave();
+  document.getElementById('qaTitle').value='';
+  toast('Task added');
+}
+
+function saveBrainDump() {
+  const val=document.getElementById('brainDump').value;
+  const ts=new Date().toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit'});
+  const lines=val.split('\n').filter(Boolean);
+  data.brain_dump=lines;
+  scheduleSave(); toast('Brain dump saved');
+}
+
+function setFilter(f,el) {
+  filter=f;
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  renderKanban();
+}
+
+function switchView(view,el) {
+  activeView=view;
+  document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('view-'+view).classList.add('on');
+  if(view==='brief') generateBrief();
+  if(view==='projects') renderProjects();
+}
+
+// ═══════════════════════════════════════════════════════
+// TASK MODAL
+// ═══════════════════════════════════════════════════════
+function openTaskModal(projId) {
+  editTaskId=null;
+  populateProjSelects();
+  ['mTitle','mDue','mNext','mNotes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mPri').value='p2';
+  document.getElementById('mType').value='internal';
+  document.getElementById('mStatus').value='todo';
+  document.getElementById('mOwner').value='Dalton';
+  document.getElementById('mClaude').checked=false;
+  document.getElementById('mProj').value=projId||'';
+  document.getElementById('taskModalTitle').textContent='+ NEW TASK';
+  document.getElementById('mDelete').style.display='none';
+  document.getElementById('taskOverlay').classList.add('on');
+}
+
+function openTaskModalForProj(projId,e) {
+  e.stopPropagation(); openTaskModal(projId);
+}
+
+function openEditTaskModal(id) {
+  const t=data.tasks.find(x=>x.id===id); if(!t) return;
+  editTaskId=id;
+  populateProjSelects();
+  document.getElementById('mTitle').value=t.title||'';
+  document.getElementById('mDue').value=t.due||'';
+  document.getElementById('mNext').value=t.next_action||'';
+  document.getElementById('mNotes').value=t.notes||'';
+  document.getElementById('mPri').value=t.priority||'p2';
+  document.getElementById('mType').value=t.type||'internal';
+  document.getElementById('mStatus').value=t.status||'todo';
+  document.getElementById('mOwner').value=t.owner||'Dalton';
+  document.getElementById('mClaude').checked=t.claude||false;
+  document.getElementById('mProj').value=t.project_id||'';
+  document.getElementById('taskModalTitle').textContent='EDIT TASK';
+  document.getElementById('mDelete').style.display='block';
+  document.getElementById('taskOverlay').classList.add('on');
+}
+
+function closeTaskModal() { document.getElementById('taskOverlay').classList.remove('on'); editTaskId=null; }
+
+function saveTask() {
+  const title=document.getElementById('mTitle').value.trim();
+  if(!title) { toast('⚠ Title required'); return; }
+  const d={
+    title,
+    priority:document.getElementById('mPri').value,
+    type:document.getElementById('mType').value,
+    project_id:document.getElementById('mProj').value,
+    owner:document.getElementById('mOwner').value||'Dalton',
+    status:document.getElementById('mStatus').value,
+    due:document.getElementById('mDue').value,
+    next_action:document.getElementById('mNext').value,
+    notes:document.getElementById('mNotes').value,
+    claude:document.getElementById('mClaude').checked,
+    updated:new Date().toISOString()
+  };
+  if(editTaskId) {
+    const i=data.tasks.findIndex(x=>x.id===editTaskId);
+    data.tasks[i]={...data.tasks[i],...d};
+    toast('Task updated');
+  } else {
+    data.tasks.unshift({id:'task_'+Date.now(),...d,created:new Date().toISOString()});
+    toast('Task added');
+  }
+  render(); scheduleSave(); closeTaskModal();
+}
+
+function deleteTask() {
+  if(!editTaskId) return;
+  if(!confirm('Delete this task?')) return;
+  data.tasks=data.tasks.filter(x=>x.id!==editTaskId);
+  render(); scheduleSave(); closeTaskModal(); toast('Task deleted');
+}
+
+// ═══════════════════════════════════════════════════════
+// PROJECT MODAL
+// ═══════════════════════════════════════════════════════
+function openProjModal() {
+  editProjId=null;
+  ['pmName','pmDesc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pmType').value='internal';
+  document.getElementById('pmPri').value='p2';
+  document.getElementById('pmStatus').value='active';
+  document.getElementById('pmColor').value='#f0a500';
+  document.getElementById('projModalTitle').textContent='+ NEW PROJECT';
+  document.getElementById('pmDelete').style.display='none';
+  document.getElementById('projOverlay').classList.add('on');
+}
+
+function openEditProjModal(id,e) {
+  if(e) e.stopPropagation();
+  const p=data.projects.find(x=>x.id===id); if(!p) return;
+  editProjId=id;
+  document.getElementById('pmName').value=p.name||'';
+  document.getElementById('pmDesc').value=p.description||'';
+  document.getElementById('pmType').value=p.type||'internal';
+  document.getElementById('pmPri').value=p.priority||'p2';
+  document.getElementById('pmStatus').value=p.status||'active';
+  document.getElementById('pmColor').value=p.color||'#f0a500';
+  document.getElementById('projModalTitle').textContent='EDIT PROJECT';
+  document.getElementById('pmDelete').style.display='block';
+  document.getElementById('projOverlay').classList.add('on');
+}
+
+function closeProjModal() { document.getElementById('projOverlay').classList.remove('on'); editProjId=null; }
+
+function saveProject() {
+  const name=document.getElementById('pmName').value.trim();
+  if(!name) { toast('⚠ Name required'); return; }
+  const d={
+    name, type:document.getElementById('pmType').value,
+    priority:document.getElementById('pmPri').value,
+    status:document.getElementById('pmStatus').value,
+    color:document.getElementById('pmColor').value,
+    description:document.getElementById('pmDesc').value
+  };
+  if(editProjId) {
+    const i=data.projects.findIndex(x=>x.id===editProjId);
+    data.projects[i]={...data.projects[i],...d};
+    toast('Project updated');
+  } else {
+    data.projects.push({id:'proj_'+Date.now(),...d});
+    toast('Project created');
+  }
+  render(); scheduleSave(); closeProjModal();
+  populateProjSelects();
+}
+
+function deleteProject() {
+  if(!editProjId) return;
+  const taskCount=data.tasks.filter(t=>t.project_id===editProjId).length;
+  if(taskCount>0) {
+    if(!confirm(`This project has ${taskCount} tasks. Delete project anyway? Tasks will become unassigned.`)) return;
+    data.tasks.forEach(t=>{ if(t.project_id===editProjId) t.project_id=''; });
+  } else { if(!confirm('Delete this project?')) return; }
+  data.projects=data.projects.filter(x=>x.id!==editProjId);
+  render(); scheduleSave(); closeProjModal(); toast('Project deleted');
+}
+
+// ═══════════════════════════════════════════════════════
+// DAILY BRIEF (AI-POWERED via Anthropic API)
+// ═══════════════════════════════════════════════════════
+async function generateBrief() {
+  const el=document.getElementById('briefView');
+  el.innerHTML='<div class="brief-loading">Analyzing your tasks and generating recommendations</div>';
+  const today=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const openTasks=data.tasks.filter(t=>t.status!=='done').map(t=>{
+    const pn=projName(t.project_id);
+    return `[${t.priority.toUpperCase()}] ${t.title} | Status:${t.status} | Project:${pn||'—'} | Owner:${t.owner||'Dalton'}${t.notes?' | Blocker:'+t.notes:''}${t.claude?' | QUEUED_FOR_CLAUDE':''}`;
+  }).join('\n');
+
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:1200,
+        system:`You are the AI chief of staff for Dalton Jones, CEO of Burke Truck Equipment — a family-owned municipal snow removal truck builder in Madison, WI. 14 employees. Odoo 19.0 on-prem (live: Accounting, Inventory, Purchasing, Manufacturing, Sales, Website; in-progress: Quality, Project, Knowledge Base). Top 3 projects: Odoo Full Implementation, AI Knowledge Base/OS, BOM Build-Out. Be direct, specific, CEO-level. No fluff. Respond ONLY with a JSON object — no markdown, no backticks, no preamble:
+{"todayFocus":["top 2-3 tasks with brief why"],"claudeCanDoNow":["tasks from queue Claude can start with specific output described"],"blockers":["each blocked item with a specific unblocking move"],"insight":"one sharp strategic observation","quickWins":["1-2 actions under 15 min"]}`,
+        messages:[{role:'user',content:`Today: ${today}\n\nOpen tasks:\n${openTasks}`}]
+      })
+    });
+    const json=await res.json();
+    const raw=json.content?.find(b=>b.type==='text')?.text||'';
+    let brief;
+    try { brief=JSON.parse(raw.replace(/```json|```/g,'').trim()); }
+    catch(e) {
+      el.innerHTML=`<div class="brief-section"><h2>📋 DAILY BRIEF</h2><div style="font-size:13px;color:var(--ink2);line-height:1.7">${raw.replace(/\n/g,'<br>')}</div></div>`;
+      return;
+    }
+    let html=`<div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em">DAILY BRIEF — ${today}</div>`;
+
+    if(brief.todayFocus?.length){
+      html+=`<div class="brief-section"><h2>🎯 YOUR FOCUS TODAY</h2>`;
+      brief.todayFocus.forEach((item,i)=>html+=`<div class="brief-item"><span class="tag ${i===0?'p1':'p2'}" style="flex-shrink:0;margin-top:2px">${i===0?'P1':'P2'}</span><div class="brief-body"><div class="brief-title">${item}</div></div></div>`);
+      html+=`</div>`;
+    }
+    if(brief.claudeCanDoNow?.length){
+      html+=`<div class="brief-section"><h2>🤖 CLAUDE CAN START NOW</h2>`;
+      brief.claudeCanDoNow.forEach(item=>html+=`<div class="ai-box"><div class="ai-lbl">→ CLAUDE</div><p>${item}</p></div>`);
+      html+=`</div>`;
+    }
+    if(brief.blockers?.length){
+      html+=`<div class="brief-section"><h2>🚧 BLOCKERS — SUGGESTED MOVES</h2>`;
+      brief.blockers.forEach(item=>html+=`<div class="brief-item"><span class="tag p1" style="flex-shrink:0;margin-top:2px">!</span><div class="brief-body"><div class="brief-title">${item}</div></div></div>`);
+      html+=`</div>`;
+    }
+    if(brief.insight){
+      html+=`<div class="brief-section" style="border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.04)"><h2>💡 STRATEGIC INSIGHT</h2><p style="font-size:13px;color:var(--ink2);line-height:1.7">${brief.insight}</p></div>`;
+    }
+    if(brief.quickWins?.length){
+      html+=`<div class="brief-section"><h2>⚡ QUICK WINS (under 15 min)</h2>`;
+      brief.quickWins.forEach(item=>html+=`<div class="brief-item"><span class="tag p3" style="flex-shrink:0;margin-top:2px">✓</span><div class="brief-body"><div class="brief-title">${item}</div></div></div>`);
+      html+=`</div>`;
+    }
+    el.innerHTML=html;
+  } catch(err) {
+    el.innerHTML=`<div class="brief-section"><h2>DAILY BRIEF</h2><p style="color:var(--ink2);font-size:12px">Could not generate brief. Your ${data.tasks.filter(t=>t.status!=='done').length} open tasks are visible in the Kanban view.</p></div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtDate(d){ if(!d) return ''; const p=d.split('-'); return `${p[1]}/${p[2]}`; }
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),2500);
+}
+
+boot();
+</script>
+</body>
+</html>
