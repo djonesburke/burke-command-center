@@ -66,6 +66,24 @@
   ],
   "tasks": [
     {
+      "id": "task_1774635223724",
+      "title": "Q2 Start Meeting prep",
+      "priority": "p2",
+      "type": "internal",
+      "project_id": "proj_007",
+      "owner": "Dalton",
+      "status": "todo",
+      "due": "2026-03-27",
+      "hours": "",
+      "next_action": "",
+      "notes": "Meeting notes & Slideshow finish",
+      "claude": true,
+      "recurring": false,
+      "updated": "2026-03-27T18:13:43.724Z",
+      "note_log": [],
+      "created": "2026-03-27T18:13:43.724Z"
+    },
+    {
       "id": "task_006",
       "title": "Google Drive Reorganization Ã¢ÂÂ Audit & Propose Structure",
       "project_id": "proj_004",
