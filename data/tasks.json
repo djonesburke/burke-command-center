@@ -101,20 +101,6 @@
       "type": "internal"
     },
     {
-      "id": "task_005",
-      "title": "Research competitive pricing on truck service packages",
-      "project_id": "proj_005",
-      "priority": "p3",
-      "status": "todo",
-      "owner": "Dalton",
-      "due": "",
-      "next_action": "Claude to run competitive market research",
-      "notes": "Municipal snow removal truck service & repair market, Madison WI area",
-      "claude": true,
-      "created": "2026-03-26T00:00:00Z",
-      "updated": "2026-03-26T00:00:00Z"
-    },
-    {
       "id": "task_006",
       "title": "Google Drive Reorganization â Audit & Propose Structure",
       "project_id": "proj_004",
