@@ -148,14 +148,15 @@
       "title": "Configure auto-project creation from confirmed Sales Orders",
       "project_id": "proj_001",
       "priority": "p1",
-      "status": "todo",
+      "status": "done",
       "owner": "Dalton",
       "due": "",
       "next_action": "Map SO confirmation trigger to Project module template",
       "notes": "",
       "claude": true,
       "created": "2026-03-26T00:00:00Z",
-      "updated": "2026-03-26T00:00:00Z"
+      "updated": "2026-03-27T17:52:59.386Z",
+      "type": "internal"
     },
     {
       "id": "task_010",
