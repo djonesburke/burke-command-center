@@ -76,14 +76,14 @@
       "title": "Review Q1 financials & prepare board summary",
       "project_id": "proj_006",
       "priority": "p1",
-      "status": "inprogress",
+      "status": "todo",
       "owner": "Dalton",
       "due": "2026-03-27",
       "next_action": "Pull reports from Odoo, draft 1-pager",
       "notes": "",
       "claude": false,
       "created": "2026-03-26T00:00:00Z",
-      "updated": "2026-03-26T00:00:00Z"
+      "updated": "2026-03-27T17:45:14.168Z"
     },
     {
       "id": "task_003",
