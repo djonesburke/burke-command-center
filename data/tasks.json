@@ -103,7 +103,7 @@
     },
     {
       "id": "task_006",
-      "title": "Google Drive Reorganization Ã¢ÂÂ Audit & Propose Structure",
+      "title": "Google Drive Reorganization Audit & Propose Structure",
       "project_id": "proj_004",
       "priority": "p2",
       "status": "todo",
@@ -113,7 +113,10 @@
       "notes": "No files moved until Dalton approves proposed structure",
       "claude": true,
       "created": "2026-03-26T00:00:00Z",
-      "updated": "2026-03-26T00:00:00Z"
+      "updated": "2026-03-27T18:25:02.805Z",
+      "type": "internal",
+      "hours": "",
+      "recurring": false
     },
     {
       "id": "task_007",
