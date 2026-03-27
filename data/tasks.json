@@ -66,6 +66,24 @@
   ],
   "tasks": [
     {
+      "id": "task_1774635750990",
+      "title": "Carbide Direction",
+      "priority": "p2",
+      "type": "internal",
+      "project_id": "proj_005",
+      "owner": "Dalton",
+      "status": "todo",
+      "due": "",
+      "hours": "",
+      "next_action": "",
+      "notes": "Research what the anticipated direction of the tungsten carbide market is. This, along with the direction of the experimental blades, will set our strategy for carbide snow plow cutting edge sales for the forseeable future",
+      "claude": false,
+      "recurring": false,
+      "updated": "2026-03-27T18:22:30.990Z",
+      "note_log": [],
+      "created": "2026-03-27T18:22:30.990Z"
+    },
+    {
       "id": "task_1774635223724",
       "title": "Q2 Start Meeting prep",
       "priority": "p2",
