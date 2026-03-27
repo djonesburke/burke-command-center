@@ -162,7 +162,11 @@
       "updated": "2026-03-26T00:00:00Z"
     }
   ],
-  "brain_dump": [],
+  "brain_dump": [
+    "Send Xcal pictures of failed experimental blades with explanation on how the the inserts fractured and chipped away, similar to carbide chip fracturing when soldered into the host",
+    "How can I be a better CEO?",
+    "How can Claude better assist me in being a better CEO?"
+  ],
   "archived": [
     {
       "id": "task_001",
