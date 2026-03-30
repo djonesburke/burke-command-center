@@ -137,14 +137,14 @@
       "title": "Configure Helpdesk module & email aliases and Gmail integration",
       "project_id": "proj_001",
       "priority": "p3",
-      "status": "blocked",
+      "status": "waiting",
       "owner": "Dalton",
       "due": "2026-05-29",
       "next_action": "Set up email aliases, link Gmail, configure support teams",
       "notes": "",
       "claude": false,
       "created": "2026-03-26T00:00:00Z",
-      "updated": "2026-03-30T11:36:18.737Z",
+      "updated": "2026-03-30T11:36:19.674Z",
       "type": "odoo"
     },
     {
