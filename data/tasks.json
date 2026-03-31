@@ -127,7 +127,7 @@
       "owner": "Dalton",
       "due": "",
       "next_action": "Session with Claude to extract and document tribal BOM knowledge",
-      "notes": "All BOM knowledge currently held by Dalton only ÃÂ¢ÃÂÃÂ highest risk item",
+      "notes": "All BOM knowledge currently held by Dalton only ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ highest risk item",
       "claude": true,
       "created": "2026-03-26T00:00:00Z",
       "updated": "2026-03-26T00:00:00Z"
@@ -219,7 +219,7 @@
   "meta": {
     "owner": "Dalton Jones",
     "company": "Burke Truck Equipment",
-    "last_updated": "2026-03-30",
+    "last_updated": "2026-03-31",
     "version": "1.0"
   },
   "claude_queue_notes": "Tasks marked claude:true are queued for Claude. Reference task IDs when reporting completion."
