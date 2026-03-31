@@ -93,10 +93,8 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);
 
 /* SIDEBAR */
 .sidebar{width:280px;flex-shrink:0;background:var(--plate);border-right:1px solid var(--line);
-  display:flex;flex-direction:column;overflow:hidden;
-  position:sticky;top:calc(var(--topbar) + var(--stats) + var(--filter));
-  height:calc(100vh - var(--topbar) - var(--stats) - var(--filter));}
-.sidebar-inner{flex:1;overflow-y:auto}
+  display:flex;flex-direction:column;overflow:visible}
+.sidebar-inner{flex:1;overflow-y:visible}
 .sb-toggle{display:none}
 .sb-hdr{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);
   padding:10px 14px 6px;text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--line)}
