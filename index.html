@@ -123,12 +123,6 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);
 .cq-m{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3)}
 .cq-empty{font-size:11px;color:var(--ink3);font-style:italic}
 
-/* SCHEDULED ALERT BANNER */
-.alert-banner{background:rgba(167,139,250,.1);border-bottom:1px solid rgba(167,139,250,.3);
-  padding:8px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;font-size:12px;color:var(--purple)}
-.alert-banner-text{flex:1}
-.alert-dismiss{font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;color:var(--ink3);padding:2px 6px;border:1px solid var(--line2);border-radius:3px}
-.alert-review{font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;color:var(--purple);padding:2px 8px;border:1px solid rgba(167,139,250,.4);border-radius:3px;background:rgba(167,139,250,.1)}
 
 /* VIEWS */
 .view{display:none;flex:1;overflow:hidden;min-height:0}
@@ -220,22 +214,6 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);
 .proj-btn.add{background:var(--amber);color:#0c0e12;border-color:var(--amber);font-weight:600}
 .proj-btn.add:hover{background:var(--amber2)}
 
-/* DAILY BRIEF */
-.brief-view{flex:1;overflow-y:auto;padding:14px}
-.brief-inner{max-width:860px}
-.brief-section{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:10px}
-.brief-section h2{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--amber);letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.brief-item{padding:8px 0;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:flex-start}
-.brief-item:last-child{border-bottom:none;padding-bottom:0}
-.brief-body{flex:1}
-.brief-title{font-size:13px;font-weight:500;margin-bottom:2px}
-.brief-meta{font-size:11px;color:var(--ink2);font-family:'JetBrains Mono',monospace}
-.ai-box{background:var(--purple-bg);border:1px solid rgba(167,139,250,.25);border-radius:var(--r);padding:10px 12px;margin-bottom:7px}
-.ai-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--purple);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
-.ai-box p{font-size:12px;color:var(--ink2);line-height:1.7}
-.brief-loading{text-align:center;padding:40px;color:var(--ink3);font-family:'JetBrains Mono',monospace;font-size:12px}
-.brief-loading::after{content:'';animation:dots 1s infinite}
-@keyframes dots{0%,100%{content:'.'}33%{content:'..'}66%{content:'...'}}
 
 /* MODAL */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;
@@ -265,41 +243,35 @@ textarea.fi{resize:vertical;min-height:68px;line-height:1.5;font-family:'JetBrai
 .notes-log-entry:last-child{border-bottom:none}
 .notes-log-ts{color:var(--ink3);font-size:10px}
 
-/* TRIAGE */
-.triage-item{background:var(--raised);border:1px solid var(--line2);border-radius:var(--r);
-  padding:12px 13px;margin-bottom:7px;display:flex;gap:10px;align-items:flex-start;cursor:pointer;transition:all .12s}
-.triage-item.selected{border-color:var(--purple);background:rgba(167,139,250,.08)}
-.triage-item.parked{border-color:var(--line);opacity:.6;cursor:default}
-.triage-cb{width:17px;height:17px;border:1.5px solid var(--line2);border-radius:3px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .12s}
-.triage-item.selected .triage-cb{background:var(--purple);border-color:var(--purple)}
-.triage-item.selected .triage-cb::after{content:'✓';color:white;font-size:10px;font-weight:900}
-.triage-content{flex:1}
-.triage-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;line-height:1.4}
-.triage-dump{font-size:10px;color:var(--ink3);font-family:'JetBrains Mono',monospace;margin-bottom:6px;font-style:italic}
-.triage-meta{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
-.triage-path{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
-.path-task{background:rgba(59,130,246,.12);color:var(--blue);border:1px solid rgba(59,130,246,.25)}
-.path-claude{background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.25)}
-.path-odoo{background:rgba(167,139,250,.1);color:var(--purple);border:1px solid rgba(167,139,250,.2)}
-.path-park{background:rgba(77,92,114,.12);color:var(--ink3);border:1px solid var(--line)}
-.triage-reason{font-size:10px;color:var(--ink2);font-style:italic}
-.triage-section-hdr{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);
-  text-transform:uppercase;letter-spacing:.1em;padding:5px 0 7px;border-bottom:1px solid var(--line);margin-bottom:8px;margin-top:4px}
-.triage-note{font-size:12px;color:var(--ink2);padding:10px 12px;background:var(--bg);border-radius:var(--r);border-left:3px solid var(--amber);line-height:1.6;margin-bottom:10px}
+/* WEEK DAY LABELS */
+.week-day-hdr{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.08em;padding:4px 2px 5px;margin-top:6px;
+  border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px}
+.week-day-hdr:first-child{margin-top:0}
+.week-day-hrs{background:var(--raised);border:1px solid var(--line2);border-radius:10px;
+  padding:1px 6px;font-size:9px;color:var(--amber)}
 
-/* SCHEDULED SCAN MODAL */
-.scan-item{background:var(--raised);border:1px solid var(--line2);border-radius:var(--r);
-  padding:12px 13px;margin-bottom:7px;display:flex;gap:10px;align-items:flex-start}
-.scan-item.selected{border-color:var(--green);background:rgba(34,197,94,.06)}
-.scan-cb{width:17px;height:17px;border:1.5px solid var(--line2);border-radius:3px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:1px;transition:all .12s}
-.scan-item.selected .scan-cb{background:var(--green);border-color:var(--green)}
-.scan-item.selected .scan-cb::after{content:'✓';color:#0c0e12;font-size:10px;font-weight:900}
-.scan-content{flex:1}
-.scan-task{font-size:12px;color:var(--ink3);font-family:'JetBrains Mono',monospace;margin-bottom:4px}
-.scan-suggestion{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;line-height:1.4}
-.scan-why{font-size:11px;color:var(--ink2);font-style:italic}
+/* PROJECT COLOR DOT */
+.proj-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;cursor:default}
+
+/* STALE BLOCKED BADGE */
+.stale-badge{position:absolute;top:8px;right:8px;font-family:'JetBrains Mono',monospace;
+  font-size:8px;font-weight:700;color:#f59e0b;background:rgba(245,158,11,.12);
+  border:1px solid rgba(245,158,11,.4);border-radius:2px;padding:1px 5px;
+  letter-spacing:.04em;text-transform:uppercase}
+
+/* FOCUS MODE */
+body.focus-mode{background:rgba(8,10,14,.98)}
+body.focus-mode .sidebar{display:none}
+body.focus-mode .filterbar{display:none}
+body.focus-mode .topbar-center{display:none}
+body.focus-mode .statsbar{display:none}
+body.focus-mode .topbar-right>*:not(#exitFocusBtn){display:none}
+body.focus-mode #exitFocusBtn{display:flex!important}
+body.focus-mode .kanban{padding:16px}
+.focus-mode-overlay{display:none}
+#exitFocusBtn{display:none;background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4);color:var(--red)}
+#exitFocusBtn:hover{background:rgba(239,68,68,.25)}
 
 /* TOAST */
 .toast{position:fixed;bottom:18px;right:18px;background:var(--raised);border:1px solid var(--amber);
@@ -336,11 +308,12 @@ textarea.fi{resize:vertical;min-height:68px;line-height:1.5;font-family:'JetBrai
   <div class="topbar-center">
     <button class="vtab on" onclick="switchView('kanban',this)">KANBAN</button>
     <button class="vtab" onclick="switchView('projects',this)">PROJECTS</button>
-    <button class="vtab" onclick="switchView('brief',this)">DAILY BRIEF</button>
   </div>
   <div class="topbar-right">
     <div class="sync-pill" id="syncPill">● github</div>
     <button class="tbtn" onclick="archiveDone()" title="Archive all done tasks">Archive Done</button>
+    <button class="tbtn" id="focusBtn" onclick="activateFocusMode()" title="Focus mode: P1 tasks due today">🎯 FOCUS</button>
+    <button class="tbtn" id="exitFocusBtn" onclick="exitFocusMode()">EXIT FOCUS</button>
     <button class="tbtn" onclick="logout()">Logout</button>
     <button class="tbtn" onclick="openProjModal()">+ Project</button>
     <button class="tbtn accent" onclick="openTaskModal()">+ Task</button>
@@ -350,13 +323,6 @@ textarea.fi{resize:vertical;min-height:68px;line-height:1.5;font-family:'JetBrai
 <!-- STATS -->
 <div class="statsbar" id="statsBar"></div>
 
-<!-- ALERT BANNER (hidden by default, shown after scan) -->
-<div class="alert-banner" id="alertBanner" style="display:none">
-  <span>🤖</span>
-  <span class="alert-banner-text" id="alertBannerText"></span>
-  <button class="alert-review" onclick="openScanModal()">Review Suggestions</button>
-  <button class="alert-dismiss" onclick="dismissAlert()">Dismiss</button>
-</div>
 
 <!-- FILTER -->
 <div class="filterbar">
@@ -370,6 +336,7 @@ textarea.fi{resize:vertical;min-height:68px;line-height:1.5;font-family:'JetBrai
   <button class="fchip" onclick="setFilter('odoo',this)">ODOO</button>
   <button class="fchip" onclick="setFilter('claude',this)">→ CLAUDE</button>
   <button class="fchip" onclick="setFilter('blocked',this)">BLOCKED</button>
+  <button class="fchip" id="weekChip" onclick="setFilter('week',this)">THIS WEEK</button>
   <input class="filter-search" id="filterSearch" placeholder="Search tasks…" oninput="renderKanban()" />
 </div>
 
@@ -397,21 +364,15 @@ textarea.fi{resize:vertical;min-height:68px;line-height:1.5;font-family:'JetBrai
         <textarea class="bd-ta" id="brainDump" placeholder="Dump thoughts here…&#10;&#10;e.g.&#10;Follow up with Dane County&#10;Allen flagged cutting edge shortage&#10;Idea: automate build report"></textarea>
         <div style="display:flex;gap:5px;margin-top:5px">
           <div class="bd-save" style="flex:1" onclick="saveBrainDump()">SAVE</div>
-          <div class="bd-save" onclick="triageBrainDump()" style="flex:2;color:var(--purple);border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.07)">⚡ TRIAGE</div>
+          <div class="bd-save" onclick="copyBrainDump()" style="flex:2" id="bdCopyBtn">📋 COPY</div>
         </div>
       </div>
 
-      <div class="sb-hdr">🤖 Claude's Queue</div>
+      <div class="sb-hdr" style="display:flex;align-items:center;justify-content:space-between">
+        <span>🤖 Claude's Queue</span>
+        <button id="exportQueueBtn" onclick="exportClaudeQueue()" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;background:var(--raised);border:1px solid var(--line2);border-radius:3px;color:var(--ink3);cursor:pointer;letter-spacing:.04em" onmouseover="this.style.color='var(--amber)';this.style.borderColor='var(--amber)'" onmouseout="this.style.color='var(--ink3)';this.style.borderColor='var(--line2)'">📤 EXPORT</button>
+      </div>
       <div class="sb-body" id="claudeQueue" style="flex:1"></div>
-
-      <div class="sb-hdr" style="border-top:1px solid var(--line)">⏱ Scheduled</div>
-      <div class="sb-body">
-        <div style="font-size:10px;color:var(--ink3);font-family:'JetBrains Mono',monospace;line-height:1.7">
-          <div>Daily scan: <span style="color:var(--amber)">4:00 AM</span></div>
-          <div>Last ran: <span id="lastScanTime" style="color:var(--ink2)">—</span></div>
-        </div>
-        <div class="bd-save" style="margin-top:6px" onclick="runScanNow()">RUN SCAN NOW</div>
-      </div>
     </div>
   </div>
 
@@ -431,10 +392,6 @@ textarea.fi{resize:vertical;min-height:68px;line-height:1.5;font-family:'JetBrai
     <div class="projects-view"><div class="proj-grid" id="projGrid"></div></div>
   </div>
 
-  <!-- DAILY BRIEF -->
-  <div class="view" id="view-brief">
-    <div class="brief-view"><div class="brief-inner" id="briefView"><div class="brief-loading">Generating your daily brief</div></div></div>
-  </div>
 </div>
 
 <!-- TASK MODAL -->
@@ -497,31 +454,6 @@ textarea.fi{resize:vertical;min-height:68px;line-height:1.5;font-family:'JetBrai
   </div>
 </div>
 
-<!-- TRIAGE MODAL -->
-<div class="overlay" id="triageOverlay" onclick="if(event.target===this)closeTriageModal()">
-  <div class="modal" style="width:640px;max-height:88vh">
-    <div class="modal-title" style="color:var(--purple)">⚡ BRAIN DUMP TRIAGE</div>
-    <div id="triageBody" style="min-height:160px"></div>
-    <div class="modal-foot" id="triageFoot" style="display:none">
-      <button class="tbtn" onclick="closeTriageModal()">Cancel</button>
-      <button class="tbtn" style="color:var(--red);border-color:rgba(239,68,68,.3)" onclick="closeTriageModal(true)">Discard All</button>
-      <button class="tbtn accent" onclick="applyTriage()">Create Selected Tasks →</button>
-    </div>
-  </div>
-</div>
-
-<!-- SCHEDULED SCAN MODAL -->
-<div class="overlay" id="scanOverlay" onclick="if(event.target===this)closeScanModal()">
-  <div class="modal" style="width:660px;max-height:88vh">
-    <div class="modal-title" style="color:var(--green)">🤖 CLAUDE'S DAILY SCAN</div>
-    <div style="font-size:12px;color:var(--ink2);margin-bottom:14px;font-family:'JetBrains Mono',monospace" id="scanSubtitle"></div>
-    <div id="scanBody" style="min-height:160px"></div>
-    <div class="modal-foot" id="scanFoot" style="display:none">
-      <button class="tbtn" onclick="closeScanModal()">Dismiss All</button>
-      <button class="tbtn accent" onclick="applyScan()">Add Selected to Claude Queue →</button>
-    </div>
-  </div>
-</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -538,16 +470,13 @@ let filter='all';
 let editTaskId=null;
 let editProjId=null;
 let saveTimer=null;
-let triageResults=[];
-let scanResults=[];
-let scanBannerData=null;
+let focusActive=false;
 
 // ── BOOT ─────────────────────────────────────────────
 async function boot(){
   if(!token){document.getElementById('setupScreen').style.display='flex';return;}
   document.getElementById('setupScreen').style.display='none';
   await loadData();
-  initScheduler();
 }
 
 async function saveToken(){
@@ -562,7 +491,7 @@ async function saveToken(){
     document.getElementById('setupErr').style.display='block';
     document.getElementById('setupErr').textContent='Could not connect — check token and repo access';
     token='';localStorage.removeItem('bte_gh_token');
-  }else{initScheduler();}
+  }
 }
 function logout(){localStorage.removeItem('bte_gh_token');token='';location.reload();}
 
@@ -635,6 +564,16 @@ function renderStats(){
     <div class="stat"><div class="stat-n" style="color:var(--green)">${pct}%</div><div><div class="stat-l">Progress</div><div class="stat-s">${done}/${data.tasks.length}</div></div></div>`;
 }
 
+function getWeekBounds(){
+  const d=new Date();
+  const day=d.getDay();
+  const mon=new Date(d);
+  mon.setDate(d.getDate()-(day===0?6:day-1));
+  const fri=new Date(mon);
+  fri.setDate(mon.getDate()+4);
+  return{mon:mon.toISOString().split('T')[0],fri:fri.toISOString().split('T')[0]};
+}
+
 function filteredTasks(){
   const search=document.getElementById('filterSearch')?.value.toLowerCase()||'';
   const today=new Date().toISOString().split('T')[0];
@@ -650,9 +589,24 @@ function filteredTasks(){
     else if(filter==='claude')pass=t.claude;
     else if(filter==='blocked')pass=t.status==='blocked';
     else if(filter==='overdue')pass=t.due&&t.due<today&&t.status!=='done';
+    else if(filter==='week'){const{mon,fri}=getWeekBounds();pass=t.due&&t.due>=mon&&t.due<=fri;}
     if(search)pass=pass&&(t.title||'').toLowerCase().includes(search);
     return pass;
   });
+}
+
+function fmtWeekDay(d){
+  if(!d)return'';
+  const dt=new Date(d+'T12:00:00');
+  const days=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  const p=d.split('-');
+  return`${days[dt.getDay()]} ${parseInt(p[1])}/${parseInt(p[2])}`;
+}
+
+function isStaleBlocked(t){
+  if(t.status!=='blocked')return false;
+  if(!t.updated)return false;
+  return(Date.now()-new Date(t.updated).getTime())>3*24*60*60*1000;
 }
 
 function renderKanban(){
@@ -660,18 +614,42 @@ function renderKanban(){
   cols.forEach(c=>{document.getElementById('body-'+c).innerHTML='';document.getElementById('cnt-'+c).textContent='0';});
   const counts={};
   const today=new Date().toISOString().split('T')[0];
-  // Sort: overdue P1 first, then by priority
+  // Sort: stale blocked first in blocked col, then overdue P1, then by priority
   const sorted=filteredTasks().slice().sort((a,b)=>{
+    if(a.status==='blocked'&&b.status==='blocked'){
+      const as=isStaleBlocked(a)?1:0,bs=isStaleBlocked(b)?1:0;
+      if(as!==bs)return bs-as;
+    }
     const aOver=a.due&&a.due<today&&a.status!=='done'?1:0;
     const bOver=b.due&&b.due<today&&b.status!=='done'?1:0;
     if(aOver!==bOver)return bOver-aOver;
     const pri={p1:0,p2:1,p3:2};
     return (pri[a.priority]||1)-(pri[b.priority]||1);
   });
-  sorted.forEach(t=>{
-    const c=t.status||'todo';counts[c]=(counts[c]||0)+1;
-    document.getElementById('body-'+c)?.appendChild(buildCard(t));
-  });
+  if(filter==='week'){
+    cols.forEach(c=>{
+      const colTasks=sorted.filter(t=>(t.status||'todo')===c);
+      counts[c]=colTasks.length;
+      const body=document.getElementById('body-'+c);
+      const days={};
+      colTasks.forEach(t=>{const d=t.due||'__none__';if(!days[d])days[d]=[];days[d].push(t);});
+      Object.keys(days).sort().forEach(d=>{
+        if(d!=='__none__'){
+          const hrs=days[d].reduce((a,t)=>a+(parseFloat(t.hours)||0),0);
+          const hdr=document.createElement('div');
+          hdr.className='week-day-hdr';
+          hdr.innerHTML=fmtWeekDay(d)+(hrs>0?`<span class="week-day-hrs">~${hrs}h</span>`:'');
+          body.appendChild(hdr);
+        }
+        days[d].forEach(t=>body.appendChild(buildCard(t)));
+      });
+    });
+  }else{
+    sorted.forEach(t=>{
+      const c=t.status||'todo';counts[c]=(counts[c]||0)+1;
+      document.getElementById('body-'+c)?.appendChild(buildCard(t));
+    });
+  }
   cols.forEach(c=>{
     document.getElementById('cnt-'+c).textContent=counts[c]||0;
     if(!counts[c])document.getElementById('body-'+c).innerHTML='<div class="kcol-empty">empty</div>';
@@ -698,8 +676,12 @@ function buildCard(t){
   const notes=t.notes||'';
   const noteSnippet=notes.length>60?notes.substring(0,60)+'…':notes;
   const logCount=(t.note_log||[]).length;
+  const stale=isStaleBlocked(t);
+  const dotColor=proj?proj.color||'':'';
   el.innerHTML=`
+    ${stale?'<div class="stale-badge">⚠ STALE</div>':''}
     <div class="card-top">
+      ${dotColor?`<div class="proj-dot" style="background:${dotColor}" title="${esc(pn)}"></div>`:''}
       <div class="card-title ${done?'done':''}">${esc(t.title)}</div>
       <div class="chk ${done?'on':''}" onclick="toggleDone('${t.id}',event)"></div>
     </div>
@@ -826,6 +808,8 @@ function setFilter(f,el){
   filter=f;
   document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
+  const expBtn=document.getElementById('exportQueueBtn');
+  if(expBtn)expBtn.style.display=f==='claude'?'block':'none';
   renderKanban();
 }
 
@@ -833,7 +817,6 @@ function switchView(view,el){
   document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('on'));el.classList.add('on');
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
   document.getElementById('view-'+view).classList.add('on');
-  if(view==='brief')generateBrief();
   if(view==='projects')renderProjects();
 }
 
@@ -845,9 +828,11 @@ document.addEventListener('keydown',e=>{
   if(e.key==='b'||e.key==='B'){document.getElementById('brainDump').focus();}
   if(e.key==='1'){document.querySelectorAll('.vtab')[0].click();}
   if(e.key==='2'){document.querySelectorAll('.vtab')[1].click();}
-  if(e.key==='3'){document.querySelectorAll('.vtab')[2].click();}
   if(e.key==='/'||e.key==='k'){e.preventDefault();document.getElementById('filterSearch').focus();}
-  if(e.key==='Escape'){document.querySelectorAll('.overlay.on').forEach(o=>o.classList.remove('on'));}
+  if(e.key==='Escape'){
+    if(focusActive){exitFocusMode();return;}
+    document.querySelectorAll('.overlay.on').forEach(o=>o.classList.remove('on'));
+  }
 });
 
 // ── TASK MODAL ────────────────────────────────────────
@@ -984,268 +969,20 @@ function deleteProject(){
   render();scheduleSave();closeProjModal();toast('Project deleted');
 }
 
-// ── BRAIN DUMP TRIAGE ────────────────────────────────
-async function triageBrainDump(){
-  const val=document.getElementById('brainDump').value.trim();
-  if(!val){toast('⚠ Brain dump is empty');return;}
-  saveBrainDump();
-  const body=document.getElementById('triageBody');
-  const foot=document.getElementById('triageFoot');
-  body.innerHTML='<div class="brief-loading" style="padding:50px 0;text-align:center">Analyzing brain dump</div>';
-  foot.style.display='none';
-  document.getElementById('triageOverlay').classList.add('on');
-  const projList=data.projects.map(p=>`${p.id}: ${p.name} (${p.type})`).join('\n');
-  const today=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,
-        system:`You are the AI chief of staff for Dalton Jones, CEO of Burke Truck Equipment — family-owned municipal snow removal truck builder, Madison WI. This dashboard is CEO-level only (not shop floor).
-TRIAGE PATHS: "task"=CEO task for dashboard, "claude"=Claude handles autonomously, "odoo"=log in Odoo not here, "park"=future idea.
-PROJECTS:\n${projList}\nRespond ONLY with JSON array, no markdown:\n[{"original":"exact line","path":"task|claude|odoo|park","title":"clean title","priority":"p1|p2|p3","type":"internal|external|odoo","project_id":"proj_xxx or empty","next_action":"step","claude":true|false,"reason":"one sentence"}]`,
-        messages:[{role:'user',content:`Today: ${today}\nBrain dump:\n${val}`}]})});
-    const json=await res.json();
-    const raw=json.content?.find(b=>b.type==='text')?.text||'[]';
-    let items;
-    try{items=JSON.parse(raw.replace(/```json|```/g,'').trim());}
-    catch(e){body.innerHTML=`<div class="triage-note">Parse error — try again.<br><small style="color:var(--ink3)">${raw.substring(0,200)}</small></div>`;foot.style.display='flex';return;}
-    triageResults=items;renderTriageResults(items);foot.style.display='flex';
-  }catch(err){
-    body.innerHTML='<div class="triage-note" style="border-color:var(--red)">Connection error — try again.</div>';
-    foot.style.display='flex';
-  }
+// ── BRAIN DUMP ────────────────────────────────────────
+function copyBrainDump(){
+  const val=document.getElementById('brainDump').value;
+  if(!val.trim()){toast('⚠ Brain dump is empty');return;}
+  navigator.clipboard.writeText(val).then(()=>{
+    const btn=document.getElementById('bdCopyBtn');
+    const orig=btn.textContent;
+    btn.textContent='Copied — paste into Claude';
+    btn.style.color='var(--green)';btn.style.borderColor='rgba(34,197,94,.4)';
+    setTimeout(()=>{btn.textContent=orig;btn.style.color='';btn.style.borderColor='';},2200);
+  }).catch(()=>toast('⚠ Could not access clipboard'));
 }
 
-function renderTriageResults(items){
-  const body=document.getElementById('triageBody');
-  const pathLabels={task:'→ Create Task',claude:'→ Claude Queue',odoo:'→ Log in Odoo',park:'→ Park It'};
-  const pathClass={task:'path-task',claude:'path-claude',odoo:'path-odoo',park:'path-park'};
-  const taskItems=items.filter(i=>i.path==='task'||i.path==='claude');
-  const otherItems=items.filter(i=>i.path==='odoo'||i.path==='park');
-  let html='';
-  if(taskItems.length){
-    html+=`<div class="triage-section-hdr">Will create as tasks (${taskItems.length}) — click to deselect</div>`;
-    taskItems.forEach((item)=>{
-      const gi=items.indexOf(item);
-      const pn=data.projects.find(p=>p.id===item.project_id)?.name||'';
-      html+=`<div class="triage-item selected" id="tri-${gi}" onclick="toggleTriageItem(${gi})">
-        <div class="triage-cb"></div>
-        <div class="triage-content">
-          <div class="triage-title">${esc(item.title||item.original)}</div>
-          <div class="triage-dump">"${esc(item.original)}"</div>
-          <div class="triage-meta">
-            <span class="triage-path ${pathClass[item.path]}">${pathLabels[item.path]}</span>
-            <span class="tag ${item.priority||'p2'}">${(item.priority||'p2').toUpperCase()}</span>
-            <span class="tag ${item.type||'internal'}">${item.type||'internal'}</span>
-            ${item.claude?'<span class="tag claude-t">→ CLAUDE</span>':''}
-            ${pn?`<span class="tag proj-t">${esc(pn)}</span>`:''}
-            <span class="triage-reason">${esc(item.reason||'')}${item.next_action?' · Next: '+esc(item.next_action):''}</span>
-          </div>
-        </div>
-      </div>`;
-    });
-  }
-  if(otherItems.length){
-    html+=`<div class="triage-section-hdr" style="margin-top:14px">Not creating as tasks (${otherItems.length})</div>`;
-    otherItems.forEach(item=>{
-      const gi=items.indexOf(item);
-      html+=`<div class="triage-item parked" id="tri-${gi}">
-        <div class="triage-content">
-          <div class="triage-dump">"${esc(item.original)}"</div>
-          <div class="triage-meta">
-            <span class="triage-path ${pathClass[item.path]}">${pathLabels[item.path]}</span>
-            <span class="triage-reason">${esc(item.reason||'')}${item.path==='odoo'&&item.next_action?' · '+esc(item.next_action):''}</span>
-          </div>
-        </div>
-      </div>`;
-    });
-  }
-  body.innerHTML=html||'<div class="triage-note">No actionable items found.</div>';
-}
 
-function toggleTriageItem(idx){
-  const el=document.getElementById('tri-'+idx);if(!el)return;
-  const item=triageResults[idx];
-  if(item.path==='odoo'||item.path==='park')return;
-  el.classList.toggle('selected');
-}
-
-function closeTriageModal(discard=false){
-  document.getElementById('triageOverlay').classList.remove('on');
-  if(discard){document.getElementById('brainDump').value='';data.brain_dump=[];scheduleSave();toast('Brain dump cleared');}
-  triageResults=[];
-}
-
-function applyTriage(){
-  const selected=triageResults.filter((item,idx)=>{
-    const el=document.getElementById('tri-'+idx);return el&&el.classList.contains('selected');
-  });
-  if(!selected.length){toast('No items selected');return;}
-  selected.forEach(item=>{
-    data.tasks.unshift({id:'task_'+Date.now()+'_'+Math.random().toString(36).slice(2,5),
-      title:item.title||item.original,priority:item.priority||'p2',type:item.type||'internal',
-      project_id:item.project_id||'',owner:'Dalton',status:'todo',due:'',hours:'',
-      next_action:item.next_action||'',notes:`From brain dump: "${item.original}"`,
-      claude:item.claude||item.path==='claude',recurring:false,note_log:[],
-      created:new Date().toISOString(),updated:new Date().toISOString()});
-  });
-  const remaining=data.brain_dump.filter(line=>!selected.some(item=>item.original===line.trim()));
-  data.brain_dump=remaining;
-  document.getElementById('brainDump').value=remaining.join('\n');
-  render();scheduleSave();closeTriageModal();
-  toast(`✓ ${selected.length} task${selected.length!==1?'s':''} created`);
-}
-
-// ── SCHEDULED SCAN ────────────────────────────────────
-function initScheduler(){
-  const now=new Date();
-  // Check if we should show a pending scan from storage
-  const pending=localStorage.getItem('bte_scan_pending');
-  if(pending){
-    try{
-      const d=JSON.parse(pending);
-      scanResults=d.results;
-      showScanBanner(d.taskCount,d.ranAt);
-    }catch(e){}
-  }
-  // Schedule next 4am run
-  scheduleNext4am();
-}
-
-function scheduleNext4am(){
-  const now=new Date();
-  const next=new Date(now);
-  next.setHours(4,0,0,0);
-  if(next<=now)next.setDate(next.getDate()+1);
-  const ms=next-now;
-  setTimeout(()=>{runScan();scheduleNext4am();},ms);
-}
-
-async function runScan(){
-  const ranAt=new Date().toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit'});
-  localStorage.setItem('bte_last_scan',ranAt);
-  document.getElementById('lastScanTime').textContent=ranAt;
-  const openTasks=data.tasks.filter(t=>t.status!=='done');
-  if(!openTasks.length)return;
-  const today=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  const taskList=openTasks.map(t=>`[${t.priority.toUpperCase()}] ${t.title} | Status:${t.status} | Project:${projName(t.project_id)||'—'}${t.claude?' | ALREADY_IN_CLAUDE_QUEUE':''}${t.due?' | Due:'+t.due:''}`).join('\n');
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,
-        system:`You are the AI chief of staff for Dalton Jones, CEO of Burke Truck Equipment. Scan his open tasks and identify specific ways you (Claude) can assist in completing them. Only suggest tasks that Claude can genuinely help with: drafting, researching, configuring, documenting, analyzing, writing SOPs, templates, or workflows. Do NOT suggest tasks already in the Claude queue. Be specific about what you'd produce. Respond ONLY with JSON array:\n[{"task_title":"exact task title","task_id":"if known","suggestion":"specific action Claude will take","output":"what Claude will deliver","why":"why this will help","priority":"high|medium|low"}]`,
-        messages:[{role:'user',content:`Today: ${today}\n\nOpen tasks:\n${taskList}`}]})});
-    const json=await res.json();
-    const raw=json.content?.find(b=>b.type==='text')?.text||'[]';
-    const results=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    scanResults=results;
-    localStorage.setItem('bte_scan_pending',JSON.stringify({results,taskCount:openTasks.length,ranAt}));
-    showScanBanner(openTasks.length,ranAt);
-  }catch(e){console.log('Scan error:',e);}
-}
-
-async function runScanNow(){
-  toast('Running scan…');
-  await runScan();
-}
-
-function showScanBanner(taskCount,ranAt){
-  const banner=document.getElementById('alertBanner');
-  document.getElementById('alertBannerText').textContent=`Claude scanned ${taskCount} open tasks at ${ranAt} — ${scanResults.length} suggestions ready`;
-  banner.style.display='flex';
-}
-
-function dismissAlert(){
-  document.getElementById('alertBanner').style.display='none';
-  localStorage.removeItem('bte_scan_pending');
-}
-
-function openScanModal(){
-  document.getElementById('scanSubtitle').textContent=`${scanResults.length} suggestions — select which to add to Claude's Queue`;
-  const body=document.getElementById('scanBody');
-  const foot=document.getElementById('scanFoot');
-  if(!scanResults.length){body.innerHTML='<div class="triage-note">No suggestions available. Run a scan first.</div>';foot.style.display='none';}
-  else{
-    body.innerHTML=scanResults.map((s,i)=>`
-      <div class="scan-item selected" id="scan-${i}" onclick="toggleScanItem(${i})">
-        <div class="scan-cb"></div>
-        <div class="scan-content">
-          <div class="scan-task">RE: ${esc(s.task_title)}</div>
-          <div class="scan-suggestion">${esc(s.suggestion)}</div>
-          <div class="scan-why">Output: ${esc(s.output)} · ${esc(s.why)}</div>
-        </div>
-        <span class="tag ${s.priority==='high'?'p1':s.priority==='medium'?'p2':'p3'}" style="flex-shrink:0;margin-top:2px">${s.priority.toUpperCase()}</span>
-      </div>`).join('');
-    foot.style.display='flex';
-  }
-  document.getElementById('scanOverlay').classList.add('on');
-}
-
-function toggleScanItem(i){
-  document.getElementById('scan-'+i)?.classList.toggle('selected');
-}
-
-function closeScanModal(){
-  document.getElementById('scanOverlay').classList.remove('on');
-}
-
-function applyScan(){
-  const selected=scanResults.filter((_,i)=>document.getElementById('scan-'+i)?.classList.contains('selected'));
-  if(!selected.length){toast('No items selected');return;}
-  selected.forEach(s=>{
-    // Find the task and mark it for Claude, or create a new Claude task
-    const existing=data.tasks.find(t=>t.title===s.task_title||t.id===s.task_id);
-    if(existing&&!existing.claude){
-      existing.claude=true;
-      existing.next_action=s.suggestion;
-      existing.updated=new Date().toISOString();
-    }else if(!existing){
-      data.tasks.unshift({id:'task_'+Date.now()+'_'+Math.random().toString(36).slice(2,5),
-        title:`[Claude] ${s.suggestion}`,priority:s.priority==='high'?'p1':s.priority==='medium'?'p2':'p3',
-        type:'internal',project_id:'',owner:'Dalton',status:'todo',due:'',hours:'',
-        next_action:s.output,notes:`Re: ${s.task_title}. ${s.why}`,claude:true,recurring:false,note_log:[],
-        created:new Date().toISOString(),updated:new Date().toISOString()});
-    }
-  });
-  render();scheduleSave();closeScanModal();dismissAlert();
-  toast(`✓ ${selected.length} suggestion${selected.length!==1?'s':''} added to Claude Queue`);
-}
-
-// ── DAILY BRIEF ───────────────────────────────────────
-async function generateBrief(){
-  const el=document.getElementById('briefView');
-  el.innerHTML='<div class="brief-loading">Analyzing your tasks and generating recommendations</div>';
-  const today=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  const todayISO=new Date().toISOString().split('T')[0];
-  const openTasks=data.tasks.filter(t=>t.status!=='done').map(t=>{
-    const pn=projName(t.project_id);
-    const late=t.due&&t.due<todayISO;
-    return `[${t.priority.toUpperCase()}]${late?'[OVERDUE]':''} ${t.title} | Status:${t.status} | Project:${pn||'—'}${t.hours?' | ~'+t.hours+'h':''}${t.notes?' | Blocker:'+t.notes:''}${t.claude?' | CLAUDE_QUEUE':''}`;
-  }).join('\n');
-  const totalHrs=data.tasks.filter(t=>t.status!=='done'&&t.hours).reduce((a,t)=>a+(parseFloat(t.hours)||0),0);
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,
-        system:`You are the AI chief of staff for Dalton Jones, CEO of Burke Truck Equipment — family-owned municipal snow removal truck builder, Madison WI, 14 employees, Odoo 19.0. Be direct, specific, CEO-level. No fluff. Respond ONLY with JSON:\n{"todayFocus":["top 2-3 tasks with why"],"claudeCanDoNow":["specific actions from queue"],"blockers":["each with unblocking move"],"insight":"one sharp observation","quickWins":["1-2 under 15 min"],"hoursNote":"comment on ${totalHrs}h estimated workload if relevant"}`,
-        messages:[{role:'user',content:`Today: ${today}\nEstimated open workload: ~${totalHrs}h\n\nOpen tasks:\n${openTasks}`}]})});
-    const json=await res.json();
-    const raw=json.content?.find(b=>b.type==='text')?.text||'';
-    let brief;
-    try{brief=JSON.parse(raw.replace(/```json|```/g,'').trim());}
-    catch(e){el.innerHTML=`<div class="brief-section"><h2>📋 DAILY BRIEF</h2><div style="font-size:13px;color:var(--ink2);line-height:1.7">${raw.replace(/\n/g,'<br>')}</div></div>`;return;}
-    let html=`<div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em">DAILY BRIEF — ${today}</div>`;
-    if(brief.hoursNote){html+=`<div class="triage-note" style="margin-bottom:10px">⏱ ${brief.hoursNote}</div>`;}
-    if(brief.todayFocus?.length){html+=`<div class="brief-section"><h2>🎯 YOUR FOCUS TODAY</h2>`;brief.todayFocus.forEach((item,i)=>html+=`<div class="brief-item"><span class="tag ${i===0?'p1':'p2'}" style="flex-shrink:0;margin-top:2px">${i===0?'P1':'P2'}</span><div class="brief-body"><div class="brief-title">${item}</div></div></div>`);html+=`</div>`;}
-    if(brief.claudeCanDoNow?.length){html+=`<div class="brief-section"><h2>🤖 CLAUDE CAN START NOW</h2>`;brief.claudeCanDoNow.forEach(item=>html+=`<div class="ai-box"><div class="ai-lbl">→ CLAUDE</div><p>${item}</p></div>`);html+=`</div>`;}
-    if(brief.blockers?.length){html+=`<div class="brief-section"><h2>🚧 BLOCKERS — MOVES</h2>`;brief.blockers.forEach(item=>html+=`<div class="brief-item"><span class="tag p1" style="flex-shrink:0;margin-top:2px">!</span><div class="brief-body"><div class="brief-title">${item}</div></div></div>`);html+=`</div>`;}
-    if(brief.insight){html+=`<div class="brief-section" style="border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.04)"><h2>💡 STRATEGIC INSIGHT</h2><p style="font-size:13px;color:var(--ink2);line-height:1.7">${brief.insight}</p></div>`;}
-    if(brief.quickWins?.length){html+=`<div class="brief-section"><h2>⚡ QUICK WINS (under 15 min)</h2>`;brief.quickWins.forEach(item=>html+=`<div class="brief-item"><span class="tag p3" style="flex-shrink:0;margin-top:2px">✓</span><div class="brief-body"><div class="brief-title">${item}</div></div></div>`);html+=`</div>`;}
-    el.innerHTML=html;
-  }catch(err){
-    el.innerHTML=`<div class="brief-section"><h2>DAILY BRIEF</h2><p style="color:var(--ink2);font-size:12px">Could not generate brief. ${data.tasks.filter(t=>t.status!=='done').length} open tasks visible in Kanban.</p></div>`;
-  }
-}
 
 // ── UTILS ─────────────────────────────────────────────
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1255,9 +992,67 @@ function toast(msg){
   setTimeout(()=>t.classList.remove('on'),2500);
 }
 
-// Init last scan time display
-const ls=localStorage.getItem('bte_last_scan');
-if(ls)document.getElementById('lastScanTime').textContent=ls;
+// ── EXPORT CLAUDE QUEUE ───────────────────────────────
+function exportClaudeQueue(){
+  const today=new Date().toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'numeric'});
+  const queue=data.tasks.filter(t=>t.claude&&t.status!=='done');
+  if(!queue.length){toast('No tasks in Claude Queue');return;}
+  const divider='─────────────────────────────';
+  const header=`CLAUDE QUEUE — ${today}\n${'━'.repeat(32)}`;
+  const lines=queue.map(t=>{
+    const pn=projName(t.project_id);
+    let s=`[${(t.priority||'p2').toUpperCase()}] ${t.title}`;
+    if(pn)s+=`\nProject: ${pn}`;
+    if(t.next_action)s+=`\nNext Action: ${t.next_action}`;
+    if(t.notes)s+=`\nNotes: ${t.notes}`;
+    if(t.due)s+=`\nDue: ${t.due}`;
+    return s+'\n'+divider;
+  }).join('\n');
+  const text=header+'\n'+lines;
+  navigator.clipboard.writeText(text).then(()=>{
+    toast('Queue copied — paste into Claude');
+  }).catch(()=>toast('⚠ Could not access clipboard'));
+}
+
+// ── FOCUS MODE ────────────────────────────────────────
+function activateFocusMode(){
+  focusActive=true;
+  document.body.classList.add('focus-mode');
+  // Switch to kanban view
+  document.querySelectorAll('.vtab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.vtab')[0]?.classList.add('on');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('view-kanban').classList.add('on');
+  const today=new Date().toISOString().split('T')[0];
+  renderFocusKanban(today);
+}
+
+function renderFocusKanban(today){
+  const cols=['todo','inprogress','blocked','waiting','done'];
+  cols.forEach(c=>{document.getElementById('body-'+c).innerHTML='';document.getElementById('cnt-'+c).textContent='0';});
+  const counts={};
+  const focused=data.tasks.filter(t=>
+    t.priority==='p1'&&t.status!=='done'&&t.due&&(t.due<=today)
+  ).sort((a,b)=>{
+    const aOver=a.due<today?1:0,bOver=b.due<today?1:0;
+    if(aOver!==bOver)return bOver-aOver;
+    return 0;
+  });
+  focused.forEach(t=>{
+    const c=t.status||'todo';counts[c]=(counts[c]||0)+1;
+    document.getElementById('body-'+c)?.appendChild(buildCard(t));
+  });
+  cols.forEach(c=>{
+    document.getElementById('cnt-'+c).textContent=counts[c]||0;
+    if(!counts[c])document.getElementById('body-'+c).innerHTML='<div class="kcol-empty">empty</div>';
+  });
+}
+
+function exitFocusMode(){
+  focusActive=false;
+  document.body.classList.remove('focus-mode');
+  renderKanban();
+}
 
 boot();
 </script>
