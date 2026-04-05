@@ -1,0 +1,192 @@
+// Burke Truck CEO Command Center — Prisma Schema
+// Phase 1 schema with Odoo integration stubs for Phase 3
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Auth (NextAuth required models) ─────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // hashed, for email/password fallback only
+  role          String    @default("member") // ceo | manager | member
+  department    String?   // accounting_hr | purchasing | operations | sales | engineering
+  active        Boolean   @default(true)
+  accounts      Account[]
+  sessions      Session[]
+  tasks         Task[]    @relation("TaskOwner")
+  brainDumps    BrainDump[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// ─── Projects ────────────────────────────────────────────────────────────────
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  type        String   @default("internal") // internal | external | odoo
+  priority    String   @default("p2")       // p1 | p2 | p3
+  status      String   @default("active")   // active | inprogress | todo | done | archived
+  color       String   @default("#F0A500")
+
+  // Urgency × Impact for project-level priority
+  urgency     Int?     // 1–5
+  impact      Int?     // 1–5
+
+  // ── Phase 3 Odoo stubs ──────────────────────────────────────
+  odooRef     String?  // e.g. "42" (res.id in Odoo)
+  odooModel   String?  // e.g. "project.project"
+
+  tasks       Task[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Tasks ───────────────────────────────────────────────────────────────────
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  priority    String   @default("p2")     // p1 | p2 | p3
+  type        String   @default("internal") // internal | external | odoo
+  status      String   @default("todo")   // todo | inprogress | blocked | waiting | done
+  owner       String?
+  dueDate     DateTime?
+  hours       Float?
+  nextAction  String?
+  notes       String?  @db.Text
+  claudeQueue Boolean  @default(false)    // queued for Claude action
+  recurring   Boolean  @default(false)    // auto-recreate on done
+
+  // Urgency × Impact matrix (P1 = High U + High I)
+  urgency     Int?     // 1–5
+  impact      Int?     // 1–5
+
+  // Source tracking (how was this task created?)
+  source      String   @default("manual") // manual | brain_dump | email | webhook | claude
+
+  // ── Phase 3 Odoo stubs ──────────────────────────────────────
+  odooRef     String?  // Odoo record ID
+  odooModel   String?  // e.g. "project.task", "sale.order", "mrp.production"
+
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   String
+  user        User?    @relation("TaskOwner", fields: [userId], references: [id])
+  userId      String?
+  noteLog     NoteLogEntry[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model NoteLogEntry {
+  id        String   @id @default(cuid())
+  content   String
+  author    String?
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId    String
+  createdAt DateTime @default(now())
+}
+
+// ─── Brain Dump ───────────────────────────────────────────────────────────────
+
+model BrainDump {
+  id          String   @id @default(cuid())
+  content     String   @db.Text
+  processed   Boolean  @default(false)
+  analysis    String?  @db.Text // Claude's JSON analysis result (pending approval)
+  approved    Boolean  @default(false)
+  submittedBy User?    @relation(fields: [userId], references: [id])
+  userId      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Improvements Queue ───────────────────────────────────────────────────────
+
+model Improvement {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+  category    String   @default("process") // product | process | workflow | technology
+  priority    String   @default("p2")
+  status      String   @default("proposed") // proposed | reviewing | approved | implementing | done | rejected
+  impact      String?  // free-text impact description
+  estimatedValue String? // e.g. "2hrs/week saved"
+  submittedBy String?
+
+  // Urgency × Impact
+  urgency     Int?
+  impactScore Int?
+
+  // ── Phase 3 Odoo stubs ──────────────────────────────────────
+  odooRef     String?
+  odooModel   String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Audit Log ────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actor      String   // user email or "claude" or "system"
+  action     String   // create | update | delete | analyze | approve | reject
+  tableName  String   // tasks | projects | improvements | brain_dump
+  recordId   String
+  before     Json?    // snapshot before change
+  after      Json?    // snapshot after change
+  notes      String?  // optional human-readable context
+  createdAt  DateTime @default(now())
+
+  @@index([tableName, recordId])
+  @@index([actor])
+  @@index([createdAt])
+}

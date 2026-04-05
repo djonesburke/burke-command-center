@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500;700&family=Barlow:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg:       #0C0E12;
+  --plate:    #111418;
+  --panel:    #161A20;
+  --raised:   #1C2028;
+  --line:     #242A34;
+  --line2:    #2E3644;
+  --ink:      #DDE3EE;
+  --ink2:     #8896AE;
+  --ink3:     #4D5C72;
+  --gold:     #F0A500;
+  --gold2:    #FFC340;
+  --p1:       #EF4444;
+  --p2:       #F0A500;
+  --p3:       #22C55E;
+  --blue:     #3B82F6;
+  --purple:   #A78BFA;
+  --teal:     #2DD4BF;
+  --r:        4px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-size: 15px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Barlow', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink3); }
+
+/* Focus rings */
+*:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Selection */
+::selection { background: rgba(240, 165, 0, 0.25); }
+
+@layer components {
+  /* ── Inputs ─────────────────────────────────────────── */
+  .field-input {
+    @apply w-full bg-burke-bg border border-burke-line2 rounded text-burke-ink
+           font-sans text-sm px-3 py-2 outline-none transition-colors;
+  }
+  .field-input:focus { border-color: var(--gold); }
+  .field-input::placeholder { color: var(--ink3); }
+
+  .field-select {
+    @apply w-full bg-burke-bg border border-burke-line2 rounded text-burke-ink
+           font-mono text-xs px-2 py-2 outline-none cursor-pointer;
+  }
+  .field-select:focus { border-color: var(--gold); }
+
+  .field-textarea {
+    @apply w-full bg-burke-bg border border-burke-line2 rounded text-burke-ink
+           font-mono text-xs px-3 py-2 outline-none resize-y leading-relaxed;
+    min-height: 80px;
+  }
+  .field-textarea:focus { border-color: var(--gold); }
+
+  /* ── Buttons ─────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded border
+           font-sans text-xs font-semibold cursor-pointer transition-all;
+    background: var(--raised);
+    border-color: var(--line2);
+    color: var(--ink2);
+  }
+  .btn:hover { color: var(--ink); border-color: var(--ink3); }
+
+  .btn-gold {
+    @apply btn;
+    background: var(--gold) !important;
+    border-color: var(--gold) !important;
+    color: #0C0E12 !important;
+    font-weight: 700 !important;
+  }
+  .btn-gold:hover { background: var(--gold2) !important; border-color: var(--gold2) !important; }
+
+  .btn-danger {
+    @apply btn;
+    color: var(--p1) !important;
+    border-color: rgba(239,68,68,.3) !important;
+  }
+  .btn-danger:hover { background: rgba(239,68,68,.08) !important; }
+
+  /* ── Tags / Badges ───────────────────────────────────── */
+  .tag {
+    @apply inline-flex items-center font-mono text-[9px] font-bold uppercase
+           tracking-wider px-1.5 py-0.5 rounded-sm;
+  }
+  .tag-p1 { background: rgba(239,68,68,.12); color: var(--p1); border: 1px solid rgba(239,68,68,.25); }
+  .tag-p2 { background: rgba(240,165,0,.12);  color: var(--p2); border: 1px solid rgba(240,165,0,.25); }
+  .tag-p3 { background: rgba(34,197,94,.12);  color: var(--p3); border: 1px solid rgba(34,197,94,.25); }
+  .tag-internal { background: rgba(59,130,246,.1); color: var(--blue); border: 1px solid rgba(59,130,246,.2); }
+  .tag-external { background: rgba(240,165,0,.1);  color: var(--gold); border: 1px solid rgba(240,165,0,.2); }
+  .tag-odoo     { background: rgba(167,139,250,.1); color: var(--purple); border: 1px solid rgba(167,139,250,.2); }
+  .tag-claude   { background: rgba(167,139,250,.15); color: var(--purple); border: 1px solid rgba(167,139,250,.3); }
+  .tag-overdue  { background: rgba(239,68,68,.15); color: var(--p1); border: 1px solid rgba(239,68,68,.35); }
+
+  /* ── Cards ───────────────────────────────────────────── */
+  .card {
+    @apply rounded border cursor-pointer relative overflow-hidden
+           transition-all duration-100 animate-cardIn;
+    background: var(--raised);
+    border-color: var(--line2);
+  }
+  .card:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,.5); }
+  .card-stripe::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  }
+  .card-stripe.p1::before { background: var(--p1); }
+  .card-stripe.p2::before { background: var(--p2); }
+  .card-stripe.p3::before { background: var(--p3); }
+
+  /* ── Modal ───────────────────────────────────────────── */
+  .modal-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center;
+    background: rgba(0,0,0,.8);
+  }
+  .modal-box {
+    @apply rounded w-full max-w-lg max-h-[90vh] overflow-y-auto p-6;
+    background: var(--plate);
+    border: 1px solid var(--line2);
+    border-top: 2px solid var(--gold);
+  }
+  .modal-title {
+    @apply font-display text-xl tracking-wide mb-4;
+    color: var(--gold);
+  }
+
+  /* ── Chip filters ────────────────────────────────────── */
+  .fchip {
+    @apply font-mono text-[10px] px-2.5 py-0.5 rounded-sm border cursor-pointer
+           uppercase tracking-wider transition-all;
+    border-color: var(--line);
+    color: var(--ink3);
+  }
+  .fchip:hover, .fchip.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(240,165,0,.08);
+  }
+
+  /* ── Toast ───────────────────────────────────────────── */
+  .toast {
+    @apply fixed bottom-5 right-5 z-[999] px-4 py-2.5 rounded font-mono text-xs
+           pointer-events-none transition-all duration-150;
+    background: var(--raised);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    box-shadow: 0 4px 20px rgba(0,0,0,.5);
+  }
+}
