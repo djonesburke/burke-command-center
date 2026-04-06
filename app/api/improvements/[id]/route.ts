@@ -4,26 +4,28 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { audit } from '@/lib/audit'
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const before = await prisma.improvement.findUnique({ where: { id: params.id } })
+  const before = await prisma.improvement.findUnique({ where: { id } })
   if (!before) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const body = await req.json()
-  const improvement = await prisma.improvement.update({ where: { id: params.id }, data: body })
+  const improvement = await prisma.improvement.update({ where: { id }, data: body })
 
-  await audit({ actor: session.user.email, action: 'update', table: 'improvements', recordId: params.id, before: before as any, after: improvement as any })
+  await audit({ actor: session.user.email, action: 'update', table: 'improvements', recordId: id, before: before as any, after: improvement as any })
   return NextResponse.json(improvement)
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const before = await prisma.improvement.findUnique({ where: { id: params.id } })
-  await prisma.improvement.delete({ where: { id: params.id } })
-  await audit({ actor: session.user.email, action: 'delete', table: 'improvements', recordId: params.id, before: before as any })
+  const before = await prisma.improvement.findUnique({ where: { id } })
+  await prisma.improvement.delete({ where: { id } })
+  await audit({ actor: session.user.email, action: 'delete', table: 'improvements', recordId: id, before: before as any })
   return NextResponse.json({ success: true })
 }

@@ -10,23 +10,25 @@ const TASK_INCLUDE = {
 }
 
 // GET /api/tasks/[id]
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const task = await prisma.task.findUnique({ where: { id: params.id }, include: TASK_INCLUDE })
+  const task = await prisma.task.findUnique({ where: { id }, include: TASK_INCLUDE })
   if (!task) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json(task)
 }
 
 // PUT /api/tasks/[id]
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session  = await getServerSession(authOptions)
   const apiKey   = req.headers.get('x-api-key')
   const isApiKey = apiKey === process.env.WEBHOOK_API_KEY
   if (!session && !isApiKey) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const before = await prisma.task.findUnique({ where: { id: params.id } })
+  const before = await prisma.task.findUnique({ where: { id } })
   if (!before) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const body = await req.json()
@@ -38,7 +40,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   if (newNote) {
     await prisma.noteLogEntry.create({
       data: {
-        taskId:  params.id,
+        taskId:  id,
         content: newNote,
         author:  session?.user?.email ?? 'claude',
       },
@@ -64,7 +66,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   if (odooModel   !== undefined) data.odooModel   = odooModel
 
   const task = await prisma.task.update({
-    where: { id: params.id },
+    where: { id },
     data,
     include: TASK_INCLUDE,
   })
@@ -104,20 +106,21 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 // DELETE /api/tasks/[id]
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const before = await prisma.task.findUnique({ where: { id: params.id } })
+  const before = await prisma.task.findUnique({ where: { id } })
   if (!before) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-  await prisma.task.delete({ where: { id: params.id } })
+  await prisma.task.delete({ where: { id } })
 
   await audit({
     actor:    session.user.email,
     action:   'delete',
     table:    'tasks',
-    recordId: params.id,
+    recordId: id,
     before:   before as any,
   })
 
