@@ -11,7 +11,10 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions)
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const apiKey = req.headers.get('x-api-key')
+  const isApiKeyAuth = apiKey && apiKey === process.env.WEBHOOK_API_KEY
+
+  if (!session && !isApiKeyAuth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const projects = await prisma.project.findMany({
     include: { _count: { select: { tasks: true } } },
