@@ -1,108 +1,120 @@
 # Burke CEO Command Center — Setup Guide
 
-## One-Time Setup (~30 minutes)
+## Where We Are Right Now
 
-### 1. Accounts to Create
+✅ GitHub repo live: `https://github.com/djonesburke/burke-command-center`
+✅ All 53 app files pushed (Next.js 15, Prisma, NextAuth, Claude AI)
+✅ Pre-generated secrets (see Section 4)
 
-| Service | URL | Purpose | Cost |
-|---|---|---|---|
-| Railway | railway.app | Hosting + PostgreSQL database | ~$20-30/mo |
-| Google Cloud Console | console.cloud.google.com | Google SSO OAuth credentials | Free |
-| GitHub | github.com/djonesburke | Code repository (already exists) | Free |
-| Anthropic | console.anthropic.com | Claude AI API (already have key) | Pay per use |
+**Next step: Connect to Railway → set env vars → deploy.**
 
 ---
 
-### 2. Railway Setup
+## Step 1 — Connect Railway to GitHub
 
-1. Go to [railway.app](https://railway.app) → Sign up with GitHub
-2. **New Project** → **Deploy from GitHub repo** → select `djonesburke/CEO-COMMAND-CENTER`
-3. Add a **PostgreSQL** database service to the same project
-4. Railway will auto-link `DATABASE_URL` to your app
-5. Go to your app service → **Variables** → add all vars from `.env.example`
+1. Go to [railway.app](https://railway.app) → log in with `djones@burketruck.com`
+2. Click **New Project**
+3. Choose **Deploy from GitHub repo**
+4. Find and select **`djonesburke/burke-command-center`**
+5. Railway creates a service — it will try to build (may fail until env vars are set — that's fine)
 
 ---
 
-### 3. Google OAuth Setup
+## Step 2 — Add PostgreSQL Database
+
+1. Inside your Railway project, click **+ New** (top right)
+2. Choose **Database → PostgreSQL**
+3. Railway automatically creates `DATABASE_URL` and links it to your app service
+4. Confirm by going to your app service → **Variables** → you should see `DATABASE_URL` already there
+
+---
+
+## Step 3 — Google OAuth Setup
 
 1. Go to [console.cloud.google.com](https://console.cloud.google.com)
-2. Create project: "Burke CEO Dashboard"
-3. **APIs & Services → OAuth consent screen**:
-   - User type: Internal (your Workspace only)
-   - App name: Burke CEO Command Center
-   - Authorized domain: your Railway domain
-4. **APIs & Services → Credentials → Create OAuth 2.0 Client ID**:
-   - Type: Web application
-   - Authorized redirect URI: `https://YOUR_DOMAIN.railway.app/api/auth/callback/google`
-5. Copy **Client ID** and **Client Secret** → paste into Railway variables
+2. Create new project → name it **"Burke CEO Dashboard"**
+3. Left menu → **APIs & Services → OAuth consent screen**
+   - User type: **Internal** (limits login to your Google Workspace only)
+   - App name: `Burke CEO Command Center`
+   - User support email: `djones@burketruck.com`
+   - Click **Save and Continue** through all steps
+4. Left menu → **APIs & Services → Credentials → + Create Credentials → OAuth 2.0 Client ID**
+   - Application type: **Web application**
+   - Name: `Burke CEO Dashboard`
+   - Authorized redirect URIs → **+ Add URI**:
+     ```
+     https://YOUR-APP.up.railway.app/api/auth/callback/google
+     ```
+     *(replace `YOUR-APP` with your actual Railway domain — find it in Railway under your service → Settings → Domains)*
+5. Click **Create** → copy the **Client ID** and **Client Secret**
 
 ---
 
-### 4. Environment Variables (Railway)
+## Step 4 — Set Environment Variables in Railway
 
+Go to your Railway app service → **Variables** tab → add each of these:
+
+| Variable | Value |
+|---|---|
+| `NEXTAUTH_URL` | `https://YOUR-APP.up.railway.app` |
+| `NEXTAUTH_SECRET` | `cc8e7329fdf1cc79db5823348153aa517eb4969ab467da85e965478ced7428b5` |
+| `GOOGLE_CLIENT_ID` | *(from Step 3)* |
+| `GOOGLE_CLIENT_SECRET` | *(from Step 3)* |
+| `ANTHROPIC_API_KEY` | *(your key from console.anthropic.com)* |
+| `WEBHOOK_API_KEY` | `mXnT6ZzzPVoQXAbTHYSNX58fExE7EAkF` |
+| `CEO_EMAIL` | `djones@burketruck.com` |
+| `CEO_INITIAL_PASSWORD` | *(choose a strong password — you'll use this as fallback login)* |
+
+> `DATABASE_URL` is already set automatically from Step 2.
+
+After adding all variables, Railway will auto-redeploy. The `railway.toml` runs:
 ```
-DATABASE_URL         ← auto-set by Railway PostgreSQL
-NEXTAUTH_URL         = https://YOUR_DOMAIN.railway.app
-NEXTAUTH_SECRET      = (run: openssl rand -base64 32)
-GOOGLE_CLIENT_ID     = (from Google Cloud Console)
-GOOGLE_CLIENT_SECRET = (from Google Cloud Console)
-ANTHROPIC_API_KEY    = (your existing key)
-WEBHOOK_API_KEY      = (run: openssl rand -hex 32)
-CEO_EMAIL            = dalton@burketruck.com
-CEO_INITIAL_PASSWORD = (set a strong password)
+npm run db:migrate && npm run build
 ```
+...then starts the app with `npm start`.
 
 ---
 
-### 5. First Deploy
+## Step 5 — Seed Your Existing Data
 
-```bash
-# 1. Install dependencies
-npm install
+After the first successful deploy:
 
-# 2. Generate Prisma client
-npm run db:generate
-
-# 3. Push to GitHub (Railway auto-deploys)
-git add .
-git commit -m "Initial Next.js CEO dashboard"
-git push origin main
-
-# Railway will auto-build and deploy.
-# After deploy, run the seed to migrate your existing data:
-
-# 4. In Railway → your app service → Shell:
-npm run db:seed
-```
+1. Railway → your app service → **Settings → Shell** (or click the ▶ terminal icon)
+2. Run:
+   ```bash
+   npx ts-node --skip-project scripts/seed.ts
+   ```
+   This creates your CEO user account and migrates your existing tasks from `data/tasks.json`.
 
 ---
 
-### 6. Browser Bookmarklet (Create Tasks from Any Page)
+## Step 6 — First Login
 
-1. Open `public/bookmarklet.js`
-2. Replace `YOUR_DOMAIN` with your Railway URL
-3. Replace `YOUR_WEBHOOK_KEY` with your `WEBHOOK_API_KEY` value
-4. Copy the `javascript:(function(){...})();` line
-5. Create a new browser bookmark → paste as the URL
-6. Click it on any webpage to send a task to your dashboard
-
-**How Claude uses this API:**
-When talking to Claude (chat, Cowork, email analysis), you can say:
-> "Create a task from this email — title: Follow up with Dane County, priority P1"
-
-Claude will call: `POST https://YOUR_DOMAIN.railway.app/api/webhook`
-with header `x-api-key: YOUR_WEBHOOK_KEY`
+1. Go to your Railway app URL
+2. Click **Sign in with Google** → use `djones@burketruck.com`
+3. Or use email/password: `djones@burketruck.com` + the `CEO_INITIAL_PASSWORD` you set
 
 ---
 
-### 7. Claude Integration Setup
+## Step 7 — Browser Bookmarklet (Create Tasks from Any Page)
 
-To allow Claude to create tasks directly, give it these instructions in your system prompt / Claude project:
+1. Open `public/bookmarklet.js` — replace:
+   - `YOUR_DOMAIN` → your Railway URL (e.g. `burke-command-center-production.up.railway.app`)
+   - `YOUR_WEBHOOK_KEY` → `mXnT6ZzzPVoQXAbTHYSNX58fExE7EAkF`
+2. Copy the entire `javascript:(function(){...})();` line
+3. Create a new browser bookmark → paste that as the URL
+4. To use: highlight text on any page → click the bookmark → a task is created in your dashboard
+
+---
+
+## Step 8 — Claude Integration
+
+To let Claude (in chat) create tasks directly, add this to your Claude Project instructions:
 
 ```
 When I ask you to create a task, call:
-POST https://YOUR_DOMAIN.railway.app/api/webhook
-Headers: { "x-api-key": "YOUR_WEBHOOK_KEY", "Content-Type": "application/json" }
+POST https://YOUR-APP.up.railway.app/api/webhook
+Headers: { "x-api-key": "mXnT6ZzzPVoQXAbTHYSNX58fExE7EAkF", "Content-Type": "application/json" }
 Body: { "type": "task", "title": "...", "priority": "p1|p2|p3", "description": "...", "source": "claude" }
 
 For improvements: set "type": "improvement" and add "category": "product|process|workflow|technology"
@@ -110,66 +122,50 @@ For improvements: set "type": "improvement" and add "category": "product|process
 
 ---
 
-### 8. Backup Strategy (Auto-configured)
-
-- **Railway**: Daily automated backups enabled in your PostgreSQL service
-- **Google Drive backup**: Set up a weekly GitHub Action to export DB → Drive
-
-To enable weekly Drive export, add these GitHub secrets:
-- `DATABASE_URL` (your Railway DB URL)
-- `GOOGLE_DRIVE_FOLDER_ID` (target folder in Drive)
-
----
-
-### 9. Local Development
+## Local Development (Optional)
 
 ```bash
-# 1. Copy env file
 cp .env.example .env
-# Fill in your values (use localhost for NEXTAUTH_URL)
+# Fill in values — use http://localhost:4000 for NEXTAUTH_URL
 
-# 2. Start local DB (optional — or use Railway DB directly)
-# Or just point DATABASE_URL at Railway DB for dev
-
-# 3. Run migrations
-npm run db:push
-
-# 4. Seed data
-npm run db:seed
-
-# 5. Start dev server
-npm run dev
-# → http://localhost:3000
+npm install
+npm run db:push      # push schema to DB
+npm run db:seed      # seed data
+npm run dev          # starts at http://localhost:4000
 ```
 
 ---
 
 ## Team Onboarding (Phase 2)
 
-When you're ready to roll out to the team:
-
-1. In Railway → Variables → Add user emails
-2. Update `User.role` in database for each team member
-3. Team members sign in with their Burke Truck Google accounts
-4. Each department sees tasks relevant to their role
-
-**Departments planned:**
-- `accounting_hr` — Finance, HR tasks
-- `purchasing` — Purchasing, Inventory tasks
-- `operations` — Shop floor, Manufacturing
-- `sales` — Customer/quoting tasks
-- `engineering` — SolidWorks, BOM, CAM tasks
+When ready to roll out to the team:
+1. Team members sign in with their `@burketruck.com` Google accounts (auto-approved since OAuth is Internal)
+2. Update their `User.role` in the database for department-level access
+3. Departments: `accounting_hr`, `purchasing`, `operations`, `sales`, `engineering`
 
 ---
 
 ## Odoo Integration (Phase 3)
 
 When ready to connect Odoo 19:
-
 1. Enable JSON-RPC API in Odoo Settings
 2. Create API user with read/write access
-3. Add `ODOO_URL`, `ODOO_DB`, `ODOO_USER`, `ODOO_PASSWORD` to Railway vars
-4. The `odooRef` and `odooModel` fields are already in the database schema, waiting
+3. Add to Railway vars: `ODOO_URL`, `ODOO_DB`, `ODOO_USER`, `ODOO_PASSWORD`
+4. The `odooRef` and `odooModel` fields are already in the DB schema, waiting
+
+---
+
+## Backup Strategy
+
+- Railway PostgreSQL includes automated daily backups (retained 7 days on Hobby plan)
+- For additional safety, export weekly via Railway shell: `pg_dump $DATABASE_URL > backup.sql`
+
+---
+
+## Restore Point
+
+Git tag `restore-point-v1` on commit `7934436` preserves the state before Railway deployment.
+To restore: `git checkout restore-point-v1`
 
 ---
 
