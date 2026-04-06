@@ -1,23 +1,21 @@
 import { NextAuthOptions } from 'next-auth'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/db'
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // No adapter — JWT sessions don't need one.
+  // User creation/lookup is handled in the signIn + jwt callbacks below.
 
   providers: [
     // ── Primary: Google SSO ──────────────────────────────────────────
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientId:     process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      allowDangerousEmailAccountLinking: true,
     }),
 
     // ── Fallback: Email + Password ───────────────────────────────────
-    // Use ONLY if Google SSO is unavailable (outage, Workspace issue, etc.)
     CredentialsProvider({
       name: 'Email & Password',
       credentials: {
@@ -44,23 +42,40 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
 
   callbacks: {
+    // Create or update the user record on first Google sign-in
+    async signIn({ user, account }) {
+      if (account?.provider === 'google' && user.email) {
+        try {
+          await prisma.user.upsert({
+            where:  { email: user.email },
+            create: { email: user.email, name: user.name ?? user.email, role: 'member', active: true },
+            update: { name: user.name ?? undefined },
+          })
+        } catch (e) {
+          console.error('[NextAuth] signIn DB error:', e)
+          return false
+        }
+      }
+      return true
+    },
+
     async jwt({ token, user }) {
       if (user) {
-        // Pull role + department from DB on first sign-in
         const dbUser = await prisma.user.findUnique({
-          where: { email: token.email! },
+          where:  { email: token.email! },
           select: { id: true, role: true, department: true, active: true },
         })
-        token.userId     = dbUser?.id     ?? user.id
-        token.role       = dbUser?.role   ?? 'member'
-        token.department = dbUser?.department ?? null
+        token.userId     = dbUser?.id           ?? user.id
+        token.role       = dbUser?.role         ?? 'member'
+        token.department = dbUser?.department   ?? null
       }
       return token
     },
+
     async session({ session, token }) {
       if (session.user) {
-        session.user.id         = token.userId as string
-        session.user.role       = token.role   as string
+        session.user.id         = token.userId     as string
+        session.user.role       = token.role       as string
         session.user.department = token.department as string | null
       }
       return session
