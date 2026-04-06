@@ -3,10 +3,9 @@ builder = "nixpacks"
 buildCommand = "npm run build"
 
 [deploy]
-startCommand = "npx prisma db push --accept-data-loss && npm start"
+startCommand = "npx prisma db push --accept-data-loss && npx next start -p ${PORT:-3000}"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 
 [environments.production.variables]
 NODE_ENV = "production"
-PORT = "3000"
