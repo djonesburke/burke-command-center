@@ -52,8 +52,8 @@ export const authOptions: NextAuthOptions = {
             update: { name: user.name ?? undefined },
           })
         } catch (e) {
-          console.error('[NextAuth] signIn DB error:', e)
-          return false
+          // Log but never block sign-in — jwt callback handles role lookup
+          console.error('[NextAuth] signIn DB upsert error:', e)
         }
       }
       return true
@@ -88,4 +88,5 @@ export const authOptions: NextAuthOptions = {
   },
 
   secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development',
 }
