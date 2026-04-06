@@ -24,8 +24,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+
 import { prisma } from '@/lib/db'
 import { audit } from '@/lib/audit'
+
+export const dynamic = 'force-dynamic'
+
 
 export async function POST(req: NextRequest) {
   const apiKey = req.headers.get('x-api-key')
