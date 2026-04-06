@@ -16,9 +16,11 @@ interface KanbanBoardProps {
   onTaskClick: (task: TaskWithProject) => void
   onStatusChange: (taskId: string, status: string) => void
   onToggleDone: (taskId: string) => void
+  onArchiveDone?: () => void
+  onArchiveTask?: (taskId: string) => void
 }
 
-export function KanbanBoard({ tasks, onTaskClick, onStatusChange, onToggleDone }: KanbanBoardProps) {
+export function KanbanBoard({ tasks, onTaskClick, onStatusChange, onToggleDone, onArchiveDone, onArchiveTask }: KanbanBoardProps) {
   return (
     <div
       className="flex-1 overflow-x-auto overflow-y-visible flex gap-2.5 p-3 items-start"
@@ -36,12 +38,26 @@ export function KanbanBoard({ tasks, onTaskClick, onStatusChange, onToggleDone }
               <span className="font-mono text-xs font-bold uppercase tracking-wider" style={{ color: col.color }}>
                 {col.label}
               </span>
-              <span
-                className="font-mono text-[10px] px-1.5 py-0.5 rounded-full border"
-                style={{ background: 'var(--bg)', borderColor: 'var(--line)', color: 'var(--ink3)' }}
-              >
-                {colTasks.length}
-              </span>
+              <div className="flex items-center gap-1.5">
+                {col.id === 'done' && onArchiveDone && colTasks.length > 0 && (
+                  <button
+                    className="font-mono text-[9px] px-1.5 py-0.5 rounded-sm border uppercase tracking-wider transition-all"
+                    style={{ borderColor: 'rgba(167,139,250,.35)', color: 'var(--purple)', background: 'rgba(167,139,250,.08)' }}
+                    onMouseOver={e => { e.currentTarget.style.background = 'rgba(167,139,250,.15)' }}
+                    onMouseOut={e => { e.currentTarget.style.background = 'rgba(167,139,250,.08)' }}
+                    onClick={onArchiveDone}
+                    title={`Archive all ${colTasks.length} done tasks`}
+                  >
+                    Archive All
+                  </button>
+                )}
+                <span
+                  className="font-mono text-[10px] px-1.5 py-0.5 rounded-full border"
+                  style={{ background: 'var(--bg)', borderColor: 'var(--line)', color: 'var(--ink3)' }}
+                >
+                  {colTasks.length}
+                </span>
+              </div>
             </div>
 
             {/* Column body */}
@@ -61,6 +77,7 @@ export function KanbanBoard({ tasks, onTaskClick, onStatusChange, onToggleDone }
                     onClick={() => onTaskClick(task)}
                     onStatusChange={status => onStatusChange(task.id, status)}
                     onToggleDone={() => onToggleDone(task.id)}
+                    onArchive={onArchiveTask ? () => onArchiveTask(task.id) : undefined}
                   />
                 ))
               )}

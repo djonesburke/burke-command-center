@@ -23,7 +23,18 @@ export async function POST(req: NextRequest) {
   })
 
   // Run Claude analysis
-  const analysis = await analyzeBrainDump(content, projectNames ?? [])
+  let analysis
+  try {
+    analysis = await analyzeBrainDump(content, projectNames ?? [])
+  } catch (err: any) {
+    console.error('Brain dump analysis error:', err)
+    const msg = err?.message ?? 'Unknown error'
+    const isKeyError = msg.includes('API key') || msg.includes('401') || msg.includes('authentication')
+    return NextResponse.json(
+      { error: isKeyError ? 'Claude API key missing or invalid — check ANTHROPIC_API_KEY in Vercel environment.' : `Claude analysis failed: ${msg}` },
+      { status: 502 }
+    )
+  }
 
   // Store analysis result on the dump record
   await prisma.brainDump.update({

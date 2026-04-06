@@ -111,6 +111,26 @@ export default function DashboardPage() {
     await patchTaskStatus(taskId, newStatus)
   }
 
+  async function archiveTask(taskId: string) {
+    setTasks(ts => ts.filter(t => t.id !== taskId))
+    await fetch(`/api/tasks/${taskId}`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'archived' }),
+    })
+    toast('Task archived')
+  }
+
+  async function archiveAllDone() {
+    const doneCount = tasks.filter(t => t.status === 'done').length
+    if (!doneCount) { toast('No done tasks to archive', 'error'); return }
+    setTasks(ts => ts.filter(t => t.status !== 'done'))
+    const res = await fetch('/api/tasks/archive-done', { method: 'POST' })
+    if (res.ok) {
+      const { archived } = await res.json()
+      toast(`Archived ${archived} tasks`)
+    }
+  }
+
   async function quickAdd(title: string, priority: string, projectId: string) {
     await saveTask({ title, priority, projectId, status: 'todo', type: 'internal', source: 'manual' } as any)
   }
@@ -164,7 +184,11 @@ export default function DashboardPage() {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content: text, projectNames: projects.map(p => p.name) }),
       })
-      if (!res.ok) { toast('Claude analysis failed', 'error'); return }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        toast(err.error ?? 'Claude analysis failed', 'error')
+        return
+      }
       const analysis = await res.json()
       setDumpReview(analysis)
     } catch {
@@ -310,6 +334,8 @@ export default function DashboardPage() {
           onTaskClick={task => { setEditTask(task); setTaskModal(true) }}
           onStatusChange={patchTaskStatus}
           onToggleDone={toggleDone}
+          onArchiveDone={archiveAllDone}
+          onArchiveTask={archiveTask}
         />
       </div>
 

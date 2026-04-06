@@ -11,6 +11,7 @@ interface TaskModalProps {
   projects: { id: string; name: string }[]
   onSave: (data: Partial<TaskWithProject> & { projectId: string }) => Promise<void>
   onDelete?: () => Promise<void>
+  defaultProjectId?: string
 }
 
 const emptyForm = {
@@ -20,7 +21,7 @@ const emptyForm = {
   urgency: '', impact: '',
 }
 
-export function TaskModal({ open, onClose, task, projects, onSave, onDelete }: TaskModalProps) {
+export function TaskModal({ open, onClose, task, projects, onSave, onDelete, defaultProjectId }: TaskModalProps) {
   const [form, setForm]       = useState(emptyForm)
   const [saving, setSaving]   = useState(false)
   const [newNote, setNewNote] = useState('')
@@ -44,7 +45,7 @@ export function TaskModal({ open, onClose, task, projects, onSave, onDelete }: T
         impact:     task.impact?.toString() ?? '',
       })
     } else {
-      setForm({ ...emptyForm, projectId: projects[0]?.id ?? '' })
+      setForm({ ...emptyForm, projectId: defaultProjectId ?? projects[0]?.id ?? '' })
     }
     setNewNote('')
   }, [task, open, projects])

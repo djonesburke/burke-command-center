@@ -9,11 +9,12 @@ interface TaskCardProps {
   onClick: () => void
   onStatusChange: (status: string) => void
   onToggleDone: () => void
+  onArchive?: () => void
 }
 
 const STATUS_OPTIONS = ['todo', 'inprogress', 'blocked', 'waiting', 'done']
 
-export function TaskCard({ task, onClick, onStatusChange, onToggleDone }: TaskCardProps) {
+export function TaskCard({ task, onClick, onStatusChange, onToggleDone, onArchive }: TaskCardProps) {
   const isDone   = task.status === 'done'
   const isOverdue = task.dueDate && !isDone && isPast(new Date(task.dueDate))
   const isStale  = !isDone && !task.updatedAt ? false
@@ -121,6 +122,21 @@ export function TaskCard({ task, onClick, onStatusChange, onToggleDone }: TaskCa
             {s === 'inprogress' ? 'WIP' : s}
           </button>
         ))}
+        {isDone && onArchive && (
+          <button
+            className="font-mono text-[9px] px-1.5 py-0.5 rounded-sm border uppercase tracking-wider transition-all"
+            style={{ borderColor: 'rgba(167,139,250,.3)', color: 'var(--purple)' }}
+            onMouseOver={e => {
+              e.currentTarget.style.background = 'rgba(167,139,250,.1)'
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.background = 'transparent'
+            }}
+            onClick={onArchive}
+          >
+            archive
+          </button>
+        )}
       </div>
     </div>
   )

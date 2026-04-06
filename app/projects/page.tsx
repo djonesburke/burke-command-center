@@ -17,11 +17,12 @@ export default function ProjectsPage() {
 
   const [projects, setProjects] = useState<ProjectWithStats[]>([])
   const [tasks,    setTasks]    = useState<TaskWithProject[]>([])
-  const [taskModal,  setTaskModal]  = useState(false)
-  const [projModal,  setProjModal]  = useState(false)
-  const [editTask,   setEditTask]   = useState<TaskWithProject | null>(null)
-  const [editProj,   setEditProj]   = useState<ProjectWithStats | null>(null)
-  const [activeProj, setActiveProj] = useState<string | null>(null)
+  const [taskModal,        setTaskModal]        = useState(false)
+  const [projModal,        setProjModal]        = useState(false)
+  const [editTask,         setEditTask]         = useState<TaskWithProject | null>(null)
+  const [editProj,         setEditProj]         = useState<ProjectWithStats | null>(null)
+  const [activeProj,       setActiveProj]       = useState<string | null>(null)
+  const [newTaskProjectId, setNewTaskProjectId] = useState<string | undefined>(undefined)
 
   useEffect(() => { if (status === 'unauthenticated') router.push('/login') }, [status, router])
   useEffect(() => { load() }, [])
@@ -106,9 +107,15 @@ export default function ProjectsPage() {
                       <StatusDot status={p.status} />
                       <h3 className="text-sm font-semibold" style={{ color: 'var(--ink)' }}>{p.name}</h3>
                     </div>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1.5">
                       <Badge variant={p.priority}>{p.priority.toUpperCase()}</Badge>
                       <Badge variant={p.type}>{p.type}</Badge>
+                      <span
+                        className="font-mono text-[10px] transition-transform duration-150"
+                        style={{ color: 'var(--ink3)', transform: activeProj === p.id ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}
+                      >
+                        ▾
+                      </span>
                     </div>
                   </div>
 
@@ -142,7 +149,7 @@ export default function ProjectsPage() {
                   <div className="flex gap-1.5">
                     <button
                       className="btn text-[10px] flex-1 justify-center"
-                      onClick={e => { e.stopPropagation(); setEditTask(null); setTaskModal(true) }}
+                      onClick={e => { e.stopPropagation(); setEditTask(null); setNewTaskProjectId(p.id); setTaskModal(true) }}
                     >
                       + Task
                     </button>
@@ -181,11 +188,12 @@ export default function ProjectsPage() {
 
       <TaskModal
         open={taskModal}
-        onClose={() => { setTaskModal(false); setEditTask(null) }}
+        onClose={() => { setTaskModal(false); setEditTask(null); setNewTaskProjectId(undefined) }}
         task={editTask}
         projects={projects.map(p => ({ id: p.id, name: p.name }))}
         onSave={saveTask}
         onDelete={editTask ? deleteTask : undefined}
+        defaultProjectId={newTaskProjectId}
       />
       <ProjectModal
         open={projModal}

@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const tasks = await prisma.task.findMany({
+    where: { status: { not: 'archived' } },
     include: TASK_INCLUDE,
     orderBy: [{ priority: 'asc' }, { createdAt: 'desc' }],
   })

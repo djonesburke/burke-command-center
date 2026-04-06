@@ -62,7 +62,11 @@ export default function BrainDumpPage() {
       body: JSON.stringify({ content: text, projectNames: projects.map(p => p.name) }),
     })
     setAnalyzing(false)
-    if (!res.ok) { toast('Analysis failed', 'error'); return }
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      toast(err.error ?? 'Analysis failed — check server logs', 'error')
+      return
+    }
     const analysis = await res.json()
     setReview(analysis)
     load() // refresh dump list
